@@ -37,7 +37,14 @@
 
 6. **Nếu gặp lỗi:** báo ngay cho **Phúc**.
 
-7. **Nếu gặp chưa rõ có thể vào link để xem thêm:** 
+
+7. **Cài đặt các gói phần mềm cần thiết trước khi làm việc:**
+
+   ```bash
+   npm install --legacy-peer-deps
+   ```
+
+8. **Nếu gặp chưa rõ có thể vào link để xem thêm:** 
     [Hướng dẫn sử dụng Git](https://youtu.be/-VmX40r5ARI)
 
 ---

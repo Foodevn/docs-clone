@@ -47,5 +47,11 @@
 8. **Nếu gặp chưa rõ có thể vào link để xem thêm:** 
     [Hướng dẫn sử dụng Git](https://youtu.be/-VmX40r5ARI)
 
+9. **Để fetch một nhánh cụ thể và chuyển sang nhánh đó:**
+
+    ```bash
+    git fetch origin <tên_nhánh>
+    git checkout <tên_nhánh>
+    ```
 ---
 

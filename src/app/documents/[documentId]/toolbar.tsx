@@ -67,7 +67,7 @@ const HeadingLevelButton = () => {
             if (value === 0) {
             editor?.chain().focus().setParagraph().run();
             } else {
-            editor?.chain().focus().toggleHeading({ level: value }).run();
+            editor?.chain().focus().toggleHeading({ level: value as Level }).run();
             }
         }}
       className={cn(

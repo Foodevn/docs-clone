@@ -19,7 +19,7 @@ import TableRow from '@tiptap/extension-table-row'
 import {EditorContent, useEditor} from '@tiptap/react'
 
 import {useEditorStore} from "@/store/use-editor-store";
-
+import { FontSizeExtension } from '@/extensions/font-size'
 export const Editor = () => {
   const { setEditor } = useEditorStore();
     const editor = useEditor({
@@ -55,6 +55,7 @@ export const Editor = () => {
       },
         extensions: [
           StarterKit,
+          FontSizeExtension,
           TextAlign.configure({
             types: ["heading", "paragraph"],
           }),

@@ -22,17 +22,17 @@ export const create = mutation({
 
 export const get = query({
     args: { paginationOpts: paginationOptsValidator, search: v.optional(v.string()) },
-    handler: async (ctx, {search , paginationOpts}) => {
+    handler: async (ctx, { search, paginationOpts }) => {
         const user = await ctx.auth.getUserIdentity();
 
         if (!user) {
             throw new ConvexError("Unauthorized");
         }
 
-        if (search){
+        if (search) {
             return await ctx.db
                 .query("documents")
-                .withSearchIndex("search_title", (q) => 
+                .withSearchIndex("search_title", (q) =>
                     q.search("title", search).eq("ownerId", user.subject)
                 )
                 .paginate(paginationOpts);
@@ -46,26 +46,52 @@ export const get = query({
 });
 
 export const removeById = mutation({
-  args: { id: v.id("documents") },
-  handler: async (ctx, args) => {
-    const user = await ctx.auth.getUserIdentity();
+    args: { id: v.id("documents") },
+    handler: async (ctx, args) => {
+        const user = await ctx.auth.getUserIdentity();
 
-    if (!user) {
-      throw new ConvexError("Unauthorized");
-    }
+        if (!user) {
+            throw new ConvexError("Unauthorized");
+        }
 
-    const document = await ctx.db.get(args.id);
+        const document = await ctx.db.get(args.id);
 
-    if (!document) {
-      throw new ConvexError("Document not found");
-    }
+        if (!document) {
+            throw new ConvexError("Document not found");
+        }
 
-    const isOwner = document.ownerId === user.subject;
+        const isOwner = document.ownerId === user.subject;
 
-    if (!isOwner) {
-        throw new ConvexError("Unauthorized");
-    }
+        if (!isOwner) {
+            throw new ConvexError("Unauthorized");
+        }
 
-    return await ctx.db.delete(args.id);
-  },
+        return await ctx.db.delete(args.id);
+    },
+});
+
+
+export const updateById = mutation({
+    args: { id: v.id("documents"), title: v.string() },
+    handler: async (ctx, args) => {
+        const user = await ctx.auth.getUserIdentity();
+
+        if (!user) {
+            throw new ConvexError("Unauthorized");
+        }
+
+        const document = await ctx.db.get(args.id);
+
+        if (!document) {
+            throw new ConvexError("Document not found");
+        }
+
+        const isOwner = document.ownerId === user.subject;
+
+        if (!isOwner) {
+            throw new ConvexError("Unauthorized");
+        }
+
+        return await ctx.db.patch(args.id, { title: args.title });
+    },
 });

@@ -26,28 +26,28 @@ export const DocumentMenu = ({ documentId, title, onNewTab }: DocumentMenuProps)
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <RenameDialog documentId={documentId}>
-        <DropdownMenuItem
+        <RenameDialog documentId={documentId} initialTitle={title}>
+          <DropdownMenuItem
             onSelect={(e) => e.preventDefault()}
             onClick={(e) => e.stopPropagation()}
-        >
+          >
             <FilePenIcon className="size-4 mr-2" />
             Rename
-        </DropdownMenuItem>
+          </DropdownMenuItem>
         </RenameDialog>
         <RemoveDialog documentId={documentId}>
-        <DropdownMenuItem
+          <DropdownMenuItem
             onSelect={(e) => e.preventDefault()}
             onClick={(e) => e.stopPropagation()}
-        >
+          >
             <TrashIcon className="size-4 mr-2" />
             Remove
-        </DropdownMenuItem>
+          </DropdownMenuItem>
         </RemoveDialog>
         <DropdownMenuItem
           onClick={() => onNewTab(documentId)}
         >
-          <ExternalLinkIcon className="size-4 mr-2"/>
+          <ExternalLinkIcon className="size-4 mr-2" />
           Open in a new tab
         </DropdownMenuItem>
       </DropdownMenuContent>

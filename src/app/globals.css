@@ -71,7 +71,9 @@
 
     --sidebar-border: 220 13% 91%;
 
-    --sidebar-ring: 217.2 91.2% 59.8%}
+    --sidebar-ring: 217.2 91.2% 59.8%
+  }
+
   .dark {
 
     --background: 0 0% 3.9%;
@@ -136,7 +138,8 @@
 
     --sidebar-border: 240 3.7% 15.9%;
 
-    --sidebar-ring: 217.2 91.2% 59.8%}
+    --sidebar-ring: 217.2 91.2% 59.8%
+  }
 }
 
 
@@ -145,12 +148,14 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
-.tiptap{
+.tiptap {
+
   /* Link styles */
   a {
     @apply text-blue-600;
@@ -160,6 +165,7 @@
       @apply underline;
     }
   }
+
   /* Image-specific styling */
   img {
     display: block;
@@ -171,6 +177,7 @@
       outline: 3px solid var(--primary);
     }
   }
+
   /* Table-specific styling */
   table {
     border-collapse: collapse;
@@ -188,7 +195,7 @@
       position: relative;
       vertical-align: top;
 
-      > * {
+      >* {
         margin-bottom: 0;
       }
     }
@@ -231,6 +238,7 @@
     cursor: ew-resize;
     cursor: col-resize;
   }
+
   /* Heading styles */
   h1,
   h2,
@@ -266,26 +274,32 @@
   h6 {
     font-size: 1rem;
   }
+
   /* List styles */
   ul,
   ol {
     padding: 0 1rem;
     margin: 1.25rem 1rem 1.25rem 0.4rem;
   }
+
   ul li {
     list-style-type: disc;
+
     p {
       margin-top: 0.25em;
       margin-bottom: 0.25em;
     }
   }
+
   ol li {
     list-style-type: decimal;
-     p {
+
+    p {
       margin-top: 0.25em;
       margin-bottom: 0.25em;
     }
   }
+
   /* Task list specific styles */
   ul[data-type='taskList'] {
     list-style: none;
@@ -296,13 +310,13 @@
       align-items: flex-start;
       display: flex;
 
-      > label {
+      >label {
         flex: 0 0 auto;
         margin-right: 0.5rem;
         user-select: none;
       }
 
-      > div {
+      >div {
         flex: 1 1 auto;
       }
     }
@@ -314,5 +328,29 @@
     ul[data-type='taskList'] {
       margin: 0;
     }
+  }
+}
+
+/* For mobile */
+.floating-threads {
+  display: none;
+}
+
+/* For desktop */
+.anchored-threads {
+  display: block;
+  max-width: 300px;
+  width: 100%;
+  position: absolute;
+  right: 12px;
+}
+
+@media (max-width: 640px) {
+  .floating-threads {
+    display: block;
+  }
+
+  .anchored-threads {
+    display: none;
   }
 }

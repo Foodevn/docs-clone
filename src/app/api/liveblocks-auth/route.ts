@@ -9,8 +9,19 @@ const liveblocks = new Liveblocks({
   secret: process.env.LIVEBLOCKS_SECRET_KEY!,
 });
 
+function normalizeSessionClaims(claims: any) {
+  return {
+    ...claims,
+    org_id: claims.o?.id || null,
+    org_slug: claims.o?.slg || null,
+    org_role: claims.o?.rol || null,
+  };
+}
+
 export async function POST(req: Request) {
   const { sessionClaims } = await auth();
+  const normalized = normalizeSessionClaims(sessionClaims);
+
   if (!sessionClaims) {
     return new Response("Unauthorized", { status: 401 });
   }
@@ -24,23 +35,23 @@ export async function POST(req: Request) {
   const document = await convex.query(api.documents.getById, { id: room });
 
   if (!document) {
-   return new Response("Unauthorized", { status: 401 });
+    return new Response("Unauthorized", { status: 401 });
   }
 
   const isOwner = document.ownerId === user.id;
   const isOrganizationMember =
-   !!(document.organizationId && document.organizationId === sessionClaims.org_id);
+    !!(document.organizationId && document.organizationId === normalized.org_id);
 
   if (!isOwner && !isOrganizationMember) {
-   return new Response("Unauthorized", { status: 401 });
+    return new Response("Unauthorized", { status: 401 });
   }
-  
+
   const session = liveblocks.prepareSession(user.id, {
-   userInfo: {
-     name: user.fullName ?? "Anonymous",
-     avatar: user.imageUrl,
-   },
- });
+    userInfo: {
+      name: user.fullName ?? "Anonymous",
+      avatar: user.imageUrl,
+    },
+  });
   session.allow(room, session.FULL_ACCESS);
   const { body, status } = await session.authorize();
 

@@ -13,7 +13,7 @@ import { FullscreenLoader } from "@/components/fullscreen-loader";
 
 import { getUser } from "./actions";
 
-type User = { id: string; name: string; avatar: string};
+type User = { id: string; name: string; avatar: string };
 
 export function Room({ children }: { children: ReactNode }) {
     const params = useParams();
@@ -25,6 +25,7 @@ export function Room({ children }: { children: ReactNode }) {
             try {
                 const list = await getUser();
                 setUser(list);
+                console.log(list);
             } catch {
                 toast.error("Failed to fetch user");
             }
@@ -43,7 +44,7 @@ export function Room({ children }: { children: ReactNode }) {
             resolveUsers={({ userIds }) => {
                 return userIds.map(
                     (userId) => users.find((user) => user.id === userId) ?? undefined
-                )
+                );
             }}
             resolveMentionSuggestions={({ text }) => {
                 let filteredUsers = users;

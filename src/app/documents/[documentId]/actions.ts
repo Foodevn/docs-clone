@@ -9,14 +9,23 @@ import { Id } from "../../../../convex/_generated/dataModel";
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 export async function getDocuments(ids: Id<"documents">[]) {
-  return await convex.query(api.documents.getByIds, { ids });
+    return await convex.query(api.documents.getByIds, { ids });
 };
-function normalizeSessionClaims(claims: any) {
+interface SessionClaims {
+    sub?: string;
+    o?: {
+        id?: string;
+        slg?: string;
+        rol?: string;
+    };
+}
+
+function normalizeSessionClaims(claims: SessionClaims | null) {
     return {
         ...claims,
-        org_id: claims.o?.id || null,
-        org_slug: claims.o?.slg || null,
-        org_role: claims.o?.rol || null,
+        org_id: claims?.o?.id || null,
+        org_slug: claims?.o?.slg || null,
+        org_role: claims?.o?.rol || null,
     };
 }
 
@@ -35,6 +44,7 @@ export async function getUser() {
         id: user.id,
         name: user.fullName ?? user.primaryEmailAddress?.emailAddress ?? "Anonymous",
         avatar: user.imageUrl,
+        color: "",
     }));
 
     return user;

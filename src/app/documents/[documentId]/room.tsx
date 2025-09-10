@@ -14,7 +14,7 @@ import { LEFT_MARGIN_DEFAULT, RIGHT_MARGIN_DEFAULT } from '@/constants/margins';
 import { getUser, getDocuments } from "./actions";
 import { Id } from "../../../../convex/_generated/dataModel";
 
-type User = { id: string; name: string; avatar: string };
+type User = { id: string; name: string; avatar: string; color: string };
 
 export function Room({ children }: { children: ReactNode }) {
     const params = useParams();
@@ -26,7 +26,7 @@ export function Room({ children }: { children: ReactNode }) {
             try {
                 const list = await getUser();
                 setUser(list);
-                console.log(list);
+
             } catch {
                 toast.error("Failed to fetch user");
             }

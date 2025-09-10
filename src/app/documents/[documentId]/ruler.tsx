@@ -33,7 +33,7 @@ export const Ruler = () => {
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const PAGE_WIDTH = 816;
-    const MINIMUM_SPACE = 100;
+    const MINIMUM_SPACE = 5;
 
     if ((isDraggingLeft || isDraggingRight) && rulerRef.current) {
       const container = rulerRef.current.querySelector("#ruler-container");

@@ -1,7 +1,7 @@
 export default {
     providers: [
         {
-            domain: "https://national-rooster-52.clerk.accounts.dev",
+            domain: process.env.CLERK_URL!,
             applicationID: "convex",
         },
     ]

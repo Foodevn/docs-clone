@@ -11,7 +11,7 @@ import { useParams } from "next/navigation";
 
 import { FullscreenLoader } from "@/components/fullscreen-loader";
 
-import { getUser,getDocuments } from "./actions";
+import { getUser, getDocuments } from "./actions";
 import { Id } from "../../../../convex/_generated/dataModel";
 
 type User = { id: string; name: string; avatar: string };
@@ -68,7 +68,7 @@ export function Room({ children }: { children: ReactNode }) {
 
                 return filteredUsers.map((user) => user.id);
             }}
-            resolveRoomsInfo={async({roomIds}) => {
+            resolveRoomsInfo={async ({ roomIds }) => {
                 const documents = await getDocuments(roomIds as Id<"documents">[]);
                 return documents.map((document) => ({
                     id: document.id,
@@ -76,7 +76,7 @@ export function Room({ children }: { children: ReactNode }) {
                 }));
             }}
         >
-            <RoomProvider id={params.documentId as string}>
+            <RoomProvider id={params.documentId as string} initialStorage={{ leftMargin: 56, rightMargin: 56 }}>
                 <ClientSideSuspense fallback={<FullscreenLoader label="Room loading..." />}>
                     {children}
                 </ClientSideSuspense>

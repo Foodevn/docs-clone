@@ -1,0 +1,106 @@
+flowchart TD
+    Start([Bắt đầu]) --> CheckAuth{Người dùng đã đăng nhập?}
+    
+    %% Authentication Flow
+    CheckAuth -->|Chưa| AuthPage[Trang xác thực]
+    AuthPage --> SignIn[Đăng nhập]
+    AuthPage --> SignUp[Đăng ký]
+    SignIn --> ValidateAuth{Xác thực hợp lệ?}
+    SignUp --> ValidateAuth
+    ValidateAuth -->|Không| AuthPage
+    ValidateAuth -->|Có| HomePage[Trang chủ]
+    
+    CheckAuth -->|Đã đăng nhập| HomePage
+    
+    %% Home Page Flow
+    HomePage --> ShowNavbar[Hiển thị thanh điều hướng]
+    ShowNavbar --> ShowTemplates[Hiển thị thư viện mẫu]
+    ShowTemplates --> LoadDocuments[Tải danh sách tài liệu]
+    LoadDocuments --> ShowDocTable[Hiển thị bảng tài liệu]
+    
+    %% Search functionality
+    ShowDocTable --> UserAction{Hành động của người dùng}
+    UserAction -->|Tìm kiếm| SearchInput[Nhập từ khóa tìm kiếm]
+    SearchInput --> FilterDocs[Lọc tài liệu theo từ khóa]
+    FilterDocs --> UpdateTable[Cập nhật bảng kết quả]
+    UpdateTable --> UserAction
+    
+    %% Document actions
+    UserAction -->|Tạo mới từ mẫu| SelectTemplate[Chọn mẫu tài liệu]
+    SelectTemplate --> CreateFromTemplate[Tạo tài liệu từ mẫu]
+    CreateFromTemplate --> SaveDocument[Lưu tài liệu vào Convex DB]
+    SaveDocument --> OpenEditor[Mở trình soạn thảo]
+    
+    UserAction -->|Mở tài liệu| SelectDocument[Chọn tài liệu]
+    SelectDocument --> LoadDocContent[Tải nội dung tài liệu]
+    LoadDocContent --> OpenEditor
+    
+    UserAction -->|Đổi tên| RenameDialog[Hộp thoại đổi tên]
+    RenameDialog --> UpdateDocName[Cập nhật tên tài liệu]
+    UpdateDocName --> RefreshTable[Làm mới bảng]
+    RefreshTable --> UserAction
+    
+    UserAction -->|Xóa| RemoveDialog[Hộp thoại xác nhận xóa]
+    RemoveDialog --> DeleteDocument[Xóa tài liệu]
+    DeleteDocument --> RefreshTable
+    
+    %% Editor Flow
+    OpenEditor --> InitEditor[Khởi tạo TipTap Editor]
+    InitEditor --> LoadCollaboration[Tải tính năng cộng tác]
+    LoadCollaboration --> SetupLiveblocks[Thiết lập Liveblocks]
+    SetupLiveblocks --> EnableRealtime[Kích hoạt chỉnh sửa realtime]
+    EnableRealtime --> ShowCursors[Hiển thị con trỏ người dùng khác]
+    ShowCursors --> EditingMode[Chế độ chỉnh sửa]
+    
+    %% Editing actions
+    EditingMode --> EditAction{Hành động chỉnh sửa}
+    EditAction -->|Nhập văn bản| TypeText[Nhập nội dung]
+    EditAction -->|Định dạng| FormatText[Định dạng văn bản]
+    EditAction -->|Chèn| InsertContent[Chèn nội dung]
+    EditAction -->|Lưu| AutoSave[Tự động lưu]
+    
+    TypeText --> SyncChanges[Đồng bộ thay đổi]
+    FormatText --> SyncChanges
+    InsertContent --> SyncChanges
+    SyncChanges --> BroadcastChanges[Phát sóng thay đổi]
+    BroadcastChanges --> UpdateOtherUsers[Cập nhật cho người dùng khác]
+    UpdateOtherUsers --> EditAction
+    
+    AutoSave --> SaveToConvex[Lưu vào Convex DB]
+    SaveToConvex --> EditAction
+    
+    %% Collaboration
+    EditAction -->|Mời cộng tác| ShareDocument[Chia sẻ tài liệu]
+    ShareDocument --> GenerateShareLink[Tạo link chia sẻ]
+    GenerateShareLink --> NotifyCollaborators[Thông báo cộng tác viên]
+    NotifyCollaborators --> EditAction
+    
+    %% Exit flows
+    EditAction -->|Đóng| SaveBeforeExit{Lưu trước khi thoát?}
+    SaveBeforeExit -->|Có| SaveToConvex
+    SaveBeforeExit -->|Không| ExitEditor[Thoát trình soạn thảo]
+    ExitEditor --> HomePage
+    
+    UserAction -->|Đăng xuất| Logout[Đăng xuất]
+    Logout --> ClearSession[Xóa phiên làm việc]
+    ClearSession --> AuthPage
+    
+    %% Error handling
+    LoadDocuments -->|Lỗi| ShowError[Hiển thị thông báo lỗi]
+    SaveToConvex -->|Lỗi| ShowError
+    ShowError --> RetryAction{Thử lại?}
+    RetryAction -->|Có| UserAction
+    RetryAction -->|Không| HomePage
+    
+    %% Styling
+    classDef startEnd fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef process fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef decision fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef database fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    classDef error fill:#ffebee,stroke:#c62828,stroke-width:2px
+    
+    class Start,ExitEditor startEnd
+    class HomePage,ShowNavbar,ShowTemplates,InitEditor,TypeText,FormatText process
+    class CheckAuth,ValidateAuth,UserAction,EditAction,SaveBeforeExit,RetryAction decision
+    class SaveDocument,SaveToConvex,LoadDocuments database
+    class ShowError error

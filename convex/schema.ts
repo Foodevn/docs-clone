@@ -15,4 +15,16 @@ export default defineSchema({
             searchField: "title",
             filterFields: ["ownerId", "organizationId"],
         }),
+
+    tags: defineTable({
+        name: v.string(),
+        color: v.string(),
+        icon:v.string(),
+    }),
+
+    documentTags: defineTable({
+        documentId: v.string(),
+        tagId: v.string(),
+    }).index("by_document_id", ["documentId"])
+        .index("by_tag_id", ["tagId"]),
 });

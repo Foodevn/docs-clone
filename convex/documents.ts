@@ -5,21 +5,21 @@ import { mutation, query } from "./_generated/server";
 import { el } from "date-fns/locale";
 
 export const getByIds = query({
-  args: { ids: v.array(v.id("documents")) },
-  handler: async (ctx, { ids }) => {
-    const documents = [];
+    args: { ids: v.array(v.id("documents")) },
+    handler: async (ctx, { ids }) => {
+        const documents = [];
 
-    for (const id of ids) {
-      const document = await ctx.db.get(id);
+        for (const id of ids) {
+            const document = await ctx.db.get(id);
 
-      if (document) {
-        documents.push({ id: document._id, name: document.title });
-      } else {
-        documents.push({ id, name: "[Remove]" })
-      }
-    }
-    return documents;
-  },
+            if (document) {
+                documents.push({ id: document._id, name: document.title });
+            } else {
+                documents.push({ id, name: "[Remove]" })
+            }
+        }
+        return documents;
+    },
 });
 export const create = mutation({
     args: { title: v.optional(v.string()), initialContent: v.optional(v.string()) },
@@ -155,14 +155,14 @@ export const updateById = mutation({
 });
 
 export const getById = query({
-  args: { id: v.id("documents") },
-  handler: async (ctx, { id }) => {
-    const document = await ctx.db.get(id);
+    args: { id: v.id("documents") },
+    handler: async (ctx, { id }) => {
+        const document = await ctx.db.get(id);
 
-    if (!document) {
-      throw new ConvexError("Document not found");
-    }
+        if (!document) {
+            throw new ConvexError("Document not found");
+        }
 
-    return document;
-  },
+        return document;
+    },
 });

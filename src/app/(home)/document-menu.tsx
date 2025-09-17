@@ -1,15 +1,14 @@
-import { ExternalLinkIcon, FilePenIcon, MoreVertical, TrashIcon } from "lucide-react";
+import { ExternalLinkIcon, FilePenIcon, MoreVertical, Tags, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RemoveDialog } from "@/components/remove-dialog";
 import { RenameDialog } from "@/components/rename-dialog";
 
-import {
-  DropdownMenu,
-  DropdownMenuItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
 import { Id } from "../../../convex/_generated/dataModel";
+
+import { AddTagDialog } from "@/components/addtag-dialog";
+
+
 
 interface DocumentMenuProps {
   documentId: Id<"documents">;
@@ -18,6 +17,8 @@ interface DocumentMenuProps {
 }
 
 export const DocumentMenu = ({ documentId, title, onNewTab }: DocumentMenuProps) => {
+
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -50,6 +51,19 @@ export const DocumentMenu = ({ documentId, title, onNewTab }: DocumentMenuProps)
           <ExternalLinkIcon className="size-4 mr-2" />
           Open in a new tab
         </DropdownMenuItem>
+
+
+        <AddTagDialog documentId={documentId} initialTitle={title}>
+          <DropdownMenuItem
+            onSelect={(e) => e.preventDefault()}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Tags className="size-4 mr-2" />
+            Add tags
+          </DropdownMenuItem>
+        </AddTagDialog>
+
+
       </DropdownMenuContent>
     </DropdownMenu>
   )

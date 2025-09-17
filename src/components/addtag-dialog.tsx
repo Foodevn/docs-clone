@@ -10,25 +10,18 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "./ui/dialog";
-import { Input } from "./ui/input";
 import { Id } from "../../convex/_generated/dataModel";
 import { api } from "../../convex/_generated/api";
 import { Button } from "./ui/button";
-import { toast } from "sonner";
-import { PlusIcon, School, Tag, Trash2Icon } from "lucide-react";
-import { insertTag } from "../../convex/documentTags";
-
+import { PlusIcon, Tag, Trash2Icon } from "lucide-react";
 import { usePaginatedQuery } from "convex/react";
-import { el } from "date-fns/locale";
 
 interface AddTagDialogProps {
     documentId: Id<"documents">;
-    initialTitle: string;
     children: React.ReactNode;
 }
 
-export const AddTagDialog = ({ documentId, initialTitle, children }: AddTagDialogProps) => {
-    const update = useMutation(api.documents.updateById);
+export const AddTagDialog = ({ documentId, children }: AddTagDialogProps) => {
 
     const [open, setOpen] = useState(false);
     const insertDocTag = useMutation(api.documentTags.insertTag);
@@ -54,7 +47,7 @@ export const AddTagDialog = ({ documentId, initialTitle, children }: AddTagDialo
 
     const insertedTag = async (tagId: string) => {
         try {
-            const result = await insertDocTag({ documentID: documentId, tagID: tagId });
+            await insertDocTag({ documentID: documentId, tagID: tagId });
         } catch (err) {
             console.error("Error inserting tag:", err);
         }
@@ -69,7 +62,7 @@ export const AddTagDialog = ({ documentId, initialTitle, children }: AddTagDialo
     };
 
 
-    const { results, status, loadMore } = usePaginatedQuery(
+    const { results } = usePaginatedQuery(
         api.tags.getAllTags,
         {},
         { initialNumItems: 100 } // số item load lần đầu

@@ -5,7 +5,7 @@ import { Building2Icon, CircleUserIcon, Tag } from "lucide-react";
 
 import { TableCell, TableRow } from "@/components/ui/table";
 
-import { Doc, Id } from "../../../convex/_generated/dataModel";
+import { Doc } from "../../../convex/_generated/dataModel";
 import { DocumentMenu } from "./document-menu";
 
 

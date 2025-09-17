@@ -1,5 +1,5 @@
 import { LoaderIcon } from "lucide-react";
-import { useQuery, PaginationStatus } from "convex/react";
+import { PaginationStatus } from "convex/react";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 

@@ -53,7 +53,7 @@ export const DocumentMenu = ({ documentId, title, onNewTab }: DocumentMenuProps)
         </DropdownMenuItem>
 
 
-        <AddTagDialog documentId={documentId} initialTitle={title}>
+        <AddTagDialog documentId={documentId}>
           <DropdownMenuItem
             onSelect={(e) => e.preventDefault()}
             onClick={(e) => e.stopPropagation()}

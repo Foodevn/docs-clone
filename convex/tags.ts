@@ -15,3 +15,4 @@ export const getAllTags = query({
         return await ctx.db.query("tags").paginate(paginationOpts);
     },
 });
+

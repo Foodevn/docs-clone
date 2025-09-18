@@ -13,7 +13,8 @@ import {
 import { Id } from "../../convex/_generated/dataModel";
 import { api } from "../../convex/_generated/api";
 import { Button } from "./ui/button";
-import { PlusIcon, Tag, Trash2Icon } from "lucide-react";
+// import { PlusIcon } from "lucide-react";
+import { Tag, Trash2Icon } from "lucide-react";
 import { usePaginatedQuery } from "convex/react";
 
 interface AddTagDialogProps {
@@ -122,7 +123,7 @@ export const AddTagDialog = ({ documentId, children }: AddTagDialogProps) => {
                             </Button>
 
                         ))}
-                        <Button
+                        {/* <Button
                             className="text-white m-0.5 transition-colors"
                             type="button"
                             onClick={(e) => {
@@ -137,7 +138,7 @@ export const AddTagDialog = ({ documentId, children }: AddTagDialogProps) => {
                         >
                             <PlusIcon />
                             <span>New ..</span>
-                        </Button>
+                        </Button> */}
                     </div>
                 )}
                 <DialogFooter>

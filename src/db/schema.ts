@@ -1,4 +1,4 @@
-import { pgTable, serial, uuid, varchar, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, serial, uuid, varchar, timestamp, boolean, text, primaryKey } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 // -----------------------------
@@ -65,6 +65,35 @@ export const passwordResets = pgTable("password_resets", {
     resetToken: varchar("reset_token", { length: 255 }).notNull(),
     expiresAt: timestamp("expires_at").notNull(),
 });
+// -----------------------------
+// 🏢 BẢNG TỔ CHỨC
+// -----------------------------
+export const organizations = pgTable("organizations", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    name: varchar("name", { length: 255 }).notNull(),
+    description: text("description"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+// -----------------------------
+// 🤝 BẢNG TRUNG GIAN (Many-to-Many)
+// -----------------------------
+export const userOrganizations = pgTable(
+    "user_organizations",
+    {
+        userId: uuid("user_id")
+            .notNull()
+            .references(() => users.id, { onDelete: "cascade" }),
+        organizationId: uuid("organization_id")
+            .notNull()
+            .references(() => organizations.id, { onDelete: "cascade" }),
+        role: varchar("role", { length: 50 }).default("member").notNull(),
+        joinedAt: timestamp("joined_at").defaultNow().notNull(),
+    },
+    (t) => ({
+        pk: primaryKey({ columns: [t.userId, t.organizationId] }),
+    })
+);
 
 // -----------------------------
 // 🔗 QUAN HỆ (Relations)
@@ -74,6 +103,22 @@ export const usersRelations = relations(users, ({ many }) => ({
     userSessions: many(userSessions),
     emailVerifications: many(emailVerifications),
     passwordResets: many(passwordResets),
+    memberships: many(userOrganizations),
+}));
+
+export const organizationsRelations = relations(organizations, ({ many }) => ({
+    members: many(userOrganizations),
+}));
+
+export const userOrganizationsRelations = relations(userOrganizations, ({ one }) => ({
+    user: one(users, {
+        fields: [userOrganizations.userId],
+        references: [users.id],
+    }),
+    organization: one(organizations, {
+        fields: [userOrganizations.organizationId],
+        references: [organizations.id],
+    }),
 }));
 
 export const refreshTokensRelations = relations(refreshTokens, ({ one }) => ({

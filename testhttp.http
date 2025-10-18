@@ -1,0 +1,23 @@
+### Register User
+POST http://localhost:3000/api/register
+Content-Type: application/json
+
+{
+  "email": "h1@gmail.com",
+  "password": "1"
+}
+
+### Login User
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+  "email": "h1@gmail.com",
+  "password": "1"
+}
+
+### Get /protected after login (use Cookie from Set-Cookie)
+GET http://localhost:3000/protected
+Content-Type: application/json
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJmMTc1NTYzLTgwZmQtNDYyYi1hZTU5LTE3M2VjYjRiODdmNSIsImVtYWlsIjoiaDFAZ21haWwuY29tIiwiaWF0IjoxNzYwNzU5Mjk0LCJleHAiOjE3NjA3NjAxOTR9.JcBi-iv6jqVeeCts6Tk9_3ilBs0mQ37ZxMfwcvgXFg0
+

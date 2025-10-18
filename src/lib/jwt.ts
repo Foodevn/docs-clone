@@ -38,6 +38,34 @@ export async function verifyToken(token: string): Promise<any | null> {
 }
 
 /**
+ * Kiểm tra xem token có sắp hết hạn không (trong vòng X giây)
+ */
+export async function isTokenExpiringSoon(token: string, thresholdSeconds: number = 300): Promise<boolean> {
+    try {
+        const { payload } = await jwtVerify(token, getSecretKey());
+        const exp = payload.exp as number;
+        const now = Math.floor(Date.now() / 1000);
+        return (exp - now) < thresholdSeconds;
+    } catch {
+        return true; // Token không hợp lệ → coi như đã hết hạn
+    }
+}
+
+// /**
+//  * Lấy thời gian còn lại của token (giây)
+//  */
+// export async function getTokenTimeRemaining(token: string): Promise<number | null> {
+//     try {
+//         const { payload } = await jwtVerify(token, getSecretKey());
+//         const exp = payload.exp as number;
+//         const now = Math.floor(Date.now() / 1000);
+//         return Math.max(0, exp - now);
+//     } catch {
+//         return null;
+//     }
+// }
+
+/**
  * Parse expiresIn string thành số giây
  */
 function parseExpiresIn(expiresIn: string): number {

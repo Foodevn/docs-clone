@@ -6,15 +6,15 @@ export default function ProtectedPage() {
     const [profile, setProfile] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
-    // useEffect(() => {
-    //     fetch("/api/profile")
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             setProfile(data.user);
-    //             setLoading(false);
-    //         })
-    //         .catch(() => setLoading(false));
-    // }, []);
+    useEffect(() => {
+        fetch("/api/db/user")
+            .then((res) => res.json())
+            .then((data) => {
+                setProfile(data);
+                setLoading(false);
+            })
+            .catch(() => setLoading(false));
+    }, []);
 
     if (loading) return <p className="p-8">Đang tải...</p>;
     if (!profile) return <p className="p-8 text-red-600">Không thể tải thông tin người dùng.</p>;

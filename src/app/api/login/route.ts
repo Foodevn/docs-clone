@@ -17,8 +17,8 @@ export async function POST(req: Request) {
     if (!match)
         return NextResponse.json({ error: "Sai tài khoản hoặc mật khẩu" }, { status: 401 });
 
-    const accessToken = signToken({ id: user.id, email: user.email }, "15m");
-    const refreshToken = signToken({ id: user.id }, "7d");
+    const accessToken = await signToken({ id: user.id, email: user.email }, "15m");
+    const refreshToken = await signToken({ id: user.id }, "7d");
 
     await db.insert(refreshTokens).values({
         userId: user.id,

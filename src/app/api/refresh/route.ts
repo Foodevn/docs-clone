@@ -11,13 +11,13 @@ export async function POST() {
 
     if (!refresh) return NextResponse.json({ error: "Không có refresh token" }, { status: 401 });
 
-    const payload = verifyToken(refresh);
+    const payload = await verifyToken(refresh);
     if (!payload) return NextResponse.json({ error: "Token không hợp lệ" }, { status: 403 });
 
     const dbToken = (await db.select().from(refreshTokens).where(eq(refreshTokens.token, refresh)))[0];
     if (!dbToken || dbToken.revoked) return NextResponse.json({ error: "Token đã bị thu hồi" }, { status: 403 });
 
-    const newAccess = signToken({ id: payload.id }, "15m");
+    const newAccess = await signToken({ id: payload.id }, "15m");
 
     const res = NextResponse.json({ accessToken: newAccess });
     res.cookies.set("access_token", newAccess, { httpOnly: true });

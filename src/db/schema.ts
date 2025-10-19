@@ -95,6 +95,19 @@ export const userOrganizations = pgTable(
     })
 );
 
+export const documents = pgTable("documents", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    organizationId: uuid("organization_id")
+        .notNull()
+        .references(() => organizations.id, { onDelete: "cascade" }),
+    title: varchar("title", { length: 255 }).notNull(),
+    initialContent: text("initial_content").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+
+
 // -----------------------------
 // 🔗 QUAN HỆ (Relations)
 // -----------------------------
@@ -108,6 +121,13 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const organizationsRelations = relations(organizations, ({ many }) => ({
     members: many(userOrganizations),
+    documents: many(documents),
+}));
+export const documentsRelations = relations(documents, ({ one }) => ({
+    organization: one(organizations, {
+        fields: [documents.organizationId],
+        references: [organizations.id],
+    }),
 }));
 
 export const userOrganizationsRelations = relations(userOrganizations, ({ one }) => ({

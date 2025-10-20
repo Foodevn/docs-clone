@@ -23,13 +23,13 @@ export const UserButton = () => {
                 console.error("Failed to fetch user", error);
             }
         };
-        // fetchUser();
-        setUser({
-            id: "1",
-            email: "admin@gmail.com",
-            name: "Admin User",
+        fetchUser();
+        // setUser({
+        //     id: "1",
+        //     email: "admin@gmail.com",
+        //     name: "Admin User",
 
-        })
+        // })
     }, []);
 
 

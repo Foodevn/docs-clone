@@ -8,12 +8,43 @@ import { DocumentsTable } from "./document-table";
 const Home = () => {
 
   const [documents, setDocuments] = useState<any[]>([]);
+
   useEffect(() => {
-    // Fetch documents from the API
-    fetch("/api/db/document/get-all")
-      .then((res) => res.json())
-      .then((data) => setDocuments(data))
-      .catch((err) => console.error("Error fetching documents:", err));
+    // Fetch user info first, then fetch documents
+    const fetchDocuments = async () => {
+      try {
+        // Lấy thông tin user hiện tại
+        const userRes = await fetch("/api/auth/me");
+        if (!userRes.ok) {
+          console.error("Failed to fetch user info");
+          return;
+        }
+
+        const { user } = await userRes.json();
+        const userId = user.id;
+
+        // Lấy documents của user
+        const docsRes = await fetch("/api/db/document/getbyid", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId }),
+        });
+
+        if (!docsRes.ok) {
+          console.error("Failed to fetch documents");
+          return;
+        }
+
+        const data = await docsRes.json();
+        setDocuments(data);
+      } catch (err) {
+        console.error("Error fetching documents:", err);
+      }
+    };
+
+    fetchDocuments();
   }, []);
 
   if (documents === undefined) {

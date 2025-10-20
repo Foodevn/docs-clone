@@ -24,3 +24,6 @@ Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJmMTc1NTYzLT
 ### Get All Documents (use Cookie from Set-Cookie)
 GET http://localhost:3000/api/db/document/get-all
 
+### get info user ()
+GET http://localhost:3000/api/auth/me
+Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI0NGQzZWVmLTM2ZDAtNGI4OS05NmZkLWZhNWM4ZmZiYTQ3NSIsImV4cCI6MTc2MDk2NTMwMywiaWF0IjoxNzYwOTY0NDAzLCJuYmYiOjE3NjA5NjQ0MDN9.ccrP1sFkkfTGx93vJyDJXWHNh1rgLuTt-4A3I0xkpJ0

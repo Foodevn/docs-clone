@@ -22,11 +22,11 @@ export default function RootLayout({
       <body
         className={inter.className}
       >
-        <TokenRefreshProvider>
-          <NuqsAdapter>
+        <NuqsAdapter>
+          <TokenRefreshProvider>
             {children}
-          </NuqsAdapter>
-        </TokenRefreshProvider>
+          </TokenRefreshProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

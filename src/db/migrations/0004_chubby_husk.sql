@@ -1,0 +1,1 @@
+ALTER TABLE "documents" ALTER COLUMN "initial_content" DROP NOT NULL;

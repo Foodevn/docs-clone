@@ -101,7 +101,7 @@ export const documents = pgTable("documents", {
         .notNull()
         .references(() => organizations.id, { onDelete: "cascade" }),
     title: varchar("title", { length: 255 }).notNull(),
-    initialContent: text("initial_content").notNull(),
+    initialContent: text("initial_content"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

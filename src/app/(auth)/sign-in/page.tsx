@@ -22,7 +22,7 @@ const SignInPage = () => {
 
         if (res.ok) {
             console.log("Đăng nhập thành công");
-            router.push("/protected");
+            router.push("/");
         } else {
             const data = await res.json();
             setError(data.error || "Đăng nhập thất bại");

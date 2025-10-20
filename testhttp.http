@@ -21,3 +21,6 @@ GET http://localhost:3000/protected
 Content-Type: application/json
 Cookie: access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJmMTc1NTYzLTgwZmQtNDYyYi1hZTU5LTE3M2VjYjRiODdmNSIsImVtYWlsIjoiaDFAZ21haWwuY29tIiwiaWF0IjoxNzYwNzU5Mjk0LCJleHAiOjE3NjA3NjAxOTR9.JcBi-iv6jqVeeCts6Tk9_3ilBs0mQ37ZxMfwcvgXFg0
 
+### Get All Documents (use Cookie from Set-Cookie)
+GET http://localhost:3000/api/db/document/get-all
+

@@ -1,10 +1,10 @@
 import { db } from "@/db";
 import { documents, userOrganizations } from "@/db/schema";
-import { eq, inArray } from "drizzle-orm";
+import { eq, inArray, and, like } from "drizzle-orm";
 
 export async function POST(request: Request) {
     try {
-        const { userId } = await request.json();
+        const { userId, search } = await request.json();
 
         if (!userId) {
             return new Response(JSON.stringify({ error: "userId is required" }), {
@@ -30,10 +30,25 @@ export async function POST(request: Request) {
         const orgIds = userOrgs.map(org => org.organizationId);
 
         // Bước 2: Lấy tất cả documents thuộc các organizations đó
-        const dsDocuments = await db
+        let query = db
             .select()
             .from(documents)
             .where(inArray(documents.organizationId, orgIds));
+
+        // Nếu có search, thêm điều kiện tìm kiếm theo title
+        if (search && search.trim() !== "") {
+            query = db
+                .select()
+                .from(documents)
+                .where(
+                    and(
+                        inArray(documents.organizationId, orgIds),
+                        like(documents.title, `%${search}%`)
+                    )
+                );
+        }
+
+        const dsDocuments = await query;
 
         return new Response(JSON.stringify(dsDocuments), {
             headers: {

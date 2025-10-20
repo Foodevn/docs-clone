@@ -9,6 +9,5 @@ import { useTokenRefresh } from "@/hooks/use-token-refresh";
 export function TokenRefreshProvider({ children }: { children: React.ReactNode }) {
     // Tự động refresh token mỗi 10 phút
     useTokenRefresh(10);
-
     return <>{children}</>;
 }

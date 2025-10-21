@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Carousel,
   CarouselContent,
@@ -11,7 +13,37 @@ import { templates } from "@/constants/templates";
 import { cn } from "@/lib/utils";
 
 export const TemplatesGallery = () => {
-  const isCreating = false
+  const router = useRouter();
+  const [isCreating, setIsCreating] = useState(false);
+
+
+  const onTemplateClick = async (title: string, initialContent: string, organizationId: string) => {
+
+    try {
+      setIsCreating(true);
+
+      const res = await fetch("/api/db/document/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, initialContent, organizationId }),
+      });
+
+      const idNewDoc = await res.json();
+
+      if (idNewDoc.id) {
+        console.log(idNewDoc);
+        router.push(`/documents/${idNewDoc.id}`);
+      }
+      setIsCreating(false);
+
+    } catch (err) {
+      console.error("Failed to fetch create documents:", err);
+    }
+
+  };
+
   return (
     <div className="bg-[#F1F3F4]">
       <div className="max-w-screen-xl mx-auto px-16 py-6 flex flex-col gap-y-4">
@@ -31,7 +63,8 @@ export const TemplatesGallery = () => {
                 >
                   <button
                     disabled={isCreating}
-                    onClick={() => { }}
+                    //TODO: Add proper initial content
+                    onClick={() => onTemplateClick(template.label, "", "319b97ca-67f2-46b8-a978-7b906073667d")}
                     style={{
                       backgroundImage: `url(${template.imageUrl})`,
                       backgroundSize: "cover",

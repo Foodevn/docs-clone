@@ -1,10 +1,12 @@
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 import { SiGoogledocs } from "react-icons/si";
 import { Building2Icon, CircleUserIcon, MoreVertical } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { documents } from "@/db/schema";
+import { DocumentMenu } from "./document-menu";
 
 type Document = typeof documents.$inferSelect;
 
@@ -13,14 +15,21 @@ interface DocumentRowProps {
 }
 
 export const DocumentRow = ({ document }: DocumentRowProps) => {
+    const router = useRouter();
+
+    const onNewTabClick = (id: string) => {
+        window.open(`/documents/${id}`, "_blank");
+    };
+
     return (
-        <TableRow
-            className="cursor-pointer"
-        >
+        <TableRow>
             <TableCell className="w-[50px]">
                 <SiGoogledocs className="size-6 fill-blue-500" />
             </TableCell>
-            <TableCell className="font-medium md:w-[45%]">
+            <TableCell
+                onClick={() => router.push(`/documents/${document.id}`)}
+                className="font-medium md:w-[45%] cursor-pointer"
+            >
                 {document.title}
             </TableCell>
             <TableCell className="text-muted-foreground hidden md:flex items-center gap-2">
@@ -34,9 +43,11 @@ export const DocumentRow = ({ document }: DocumentRowProps) => {
                 {format(new Date(document.createdAt), "MMM dd, yyyy")}
             </TableCell>
             <TableCell className="flex justify-end">
-                <Button variant="ghost" size="icon" className="rounded-full">
-                    <MoreVertical className="size-4" />
-                </Button>
+                <DocumentMenu
+                    documentId={document.id}
+                    title={document.title}
+                    onNewTab={onNewTabClick}
+                />
             </TableCell>
         </TableRow>
     );

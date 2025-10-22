@@ -1,0 +1,15 @@
+### Variables
+@baseUrl = http://localhost:3000
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4ZGQ0MzdmLWFlZGQtNDk2MS05YzQyLTk4NmVlNGIxMDU4MCIsImV4cCI6MTc2MTE2OTIwNSwiaWF0IjoxNzYxMTY4MzA1LCJuYmYiOjE3NjExNjgzMDV9.NEvVTAnmXQh5g05qBO_euup5xrjhACGt-UvBc8k3OhY
+
+### get document theo  query pragram organizationId and search 
+GET  {{baseUrl}}/api/db/document/?search=o
+Cookie: access_token={{accessToken}}
+Content-Type: application/json
+
+
+
+
+
+
+

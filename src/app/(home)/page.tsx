@@ -7,37 +7,34 @@ import { DocumentsTable } from "./document-table";
 import { useSearchParam } from "@/hooks/use-search-param";
 
 const Home = () => {
-  const [documents, setDocuments] = useState<any[]>([]);
+  const [documents, setDocuments] = useState();
   const [search] = useSearchParam();
 
   const fetchDocuments = async () => {
     try {
-      // Lấy thông tin user hiện tại
-      const userRes = await fetch("/api/auth/me");
-      if (!userRes.ok) {
-        console.error("Failed to fetch user info");
-        return;
+
+      // Tạo URL với query parameter search
+      const params = new URLSearchParams();
+      if (search && search.trim() !== "") {
+        params.append("search", search);
       }
 
-      const { user } = await userRes.json();
-      const userId = user.id;
+      const url = `/api/db/document${params.toString() ? `?${params.toString()}` : ""}`;
 
       // Lấy documents của user
-      const docsRes = await fetch("/api/db/document/getbyid", {
-        method: "POST",
+      const docsRes = await fetch(url, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId, search }),
       });
 
       if (!docsRes.ok) {
         console.error("Failed to fetch documents");
         return;
       }
-
       const data = await docsRes.json();
-      setDocuments(data);
+      setDocuments(data.allDocuments);
     } catch (err) {
       console.error("Error fetching documents:", err);
     }

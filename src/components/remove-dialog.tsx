@@ -15,6 +15,7 @@ import {
 // import { Id } from "../../convex/_generated/dataModel";
 // import { api } from "../../convex/_generated/api";
 import { documents } from "@/db/schema";
+import { useRouter } from "next/navigation";
 
 type Document = typeof documents.$inferSelect;
 
@@ -24,8 +25,30 @@ interface RemoveDialogProps {
 }
 
 export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
-  // const remove = useMutation(api.documents.removeById);
+  const router = useRouter();
   const [isRemoving, setIsRemoving] = useState(false);
+  const fetchDocuments = async (id: Document["id"]) => {
+    try {
+
+      const url = `/api/db/document/${documentId}`;
+      const docsRes = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!docsRes.ok) {
+        console.error(`Failed to fetch documents/${documentId}`);
+        return;
+      }
+      router.refresh();
+
+    } catch (err) {
+      console.error("Error fetching documents:", err);
+    }
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -48,8 +71,8 @@ export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
             onClick={(e) => {
               e.stopPropagation();
               setIsRemoving(true);
-              // remove({ id: documentId })
-              //   .finally(() => setIsRemoving(false));
+              fetchDocuments(documentId)
+                .finally(() => setIsRemoving(false));
             }}
           >
             Delete

@@ -1,12 +1,32 @@
 ### Variables
 @baseUrl = http://localhost:3000
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4ZGQ0MzdmLWFlZGQtNDk2MS05YzQyLTk4NmVlNGIxMDU4MCIsImV4cCI6MTc2MTE2OTIwNSwiaWF0IjoxNzYxMTY4MzA1LCJuYmYiOjE3NjExNjgzMDV9.NEvVTAnmXQh5g05qBO_euup5xrjhACGt-UvBc8k3OhY
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4ZGQ0MzdmLWFlZGQtNDk2MS05YzQyLTk4NmVlNGIxMDU4MCIsImV4cCI6MTc2MTE3MjIwNiwiaWF0IjoxNzYxMTcxMzA2LCJuYmYiOjE3NjExNzEzMDZ9.SZ97kmt2V_RtJLztisnxBMvP91lDGnd1rIbVMt-Li3U
 
 ### get document theo  query pragram organizationId and search 
 GET  {{baseUrl}}/api/db/document/?search=o
 Cookie: access_token={{accessToken}}
 Content-Type: application/json
 
+### create new document by organization id
+POST  {{baseUrl}}/api/db/document
+Cookie: access_token={{accessToken}}
+Content-Type: application/json
+
+{ 
+    "title":"test api create", 
+    "initialContent":"", 
+    "organizationId":"319b97ca-67f2-46b8-a978-7b906073667d" 
+}
+
+### test params 
+GET  {{baseUrl}}/api/db/document/1234
+Cookie: access_token={{accessToken}}
+Content-Type: application/json
+
+### test deleute document
+DELETE  {{baseUrl}}/api/db/document/6aa2d892-58c2-4505-b03b-102a3c1cbd11
+Cookie: access_token={{accessToken}}
+Content-Type: application/json
 
 
 

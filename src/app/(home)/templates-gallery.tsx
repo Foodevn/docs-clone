@@ -22,7 +22,7 @@ export const TemplatesGallery = () => {
     try {
       setIsCreating(true);
 
-      const res = await fetch("/api/db/document/create", {
+      const res = await fetch("/api/db/document", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,9 +32,9 @@ export const TemplatesGallery = () => {
 
       const idNewDoc = await res.json();
 
-      if (idNewDoc.id) {
+      if (idNewDoc.data.id) {
         console.log(idNewDoc);
-        router.push(`/documents/${idNewDoc.id}`);
+        router.push(`/documents/${idNewDoc.data.id}`);
       }
       setIsCreating(false);
 

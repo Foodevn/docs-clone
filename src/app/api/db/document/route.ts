@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { documents } from "@/db/schema";
+import { documents, organizations } from "@/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { verifyToken } from "@/lib/jwt";
 
@@ -13,9 +13,9 @@ import { cookies } from 'next/headers';
 // -----------------------------
 export async function GET(req: NextRequest) {
     try {
+        // Verify token
         const cookieStore = await cookies();
         const token = cookieStore.get('access_token')?.value;
-        // Verify token
 
         if (!token) {
             return NextResponse.json(
@@ -37,7 +37,6 @@ export async function GET(req: NextRequest) {
         const organizationId = searchParams.get("organizationId");
         const search = searchParams.get("search");
 
-        console.log(organizationId, search)
         // Nếu có organizationId, lọc theo organization
         let allDocuments;
         if (organizationId) {
@@ -69,13 +68,17 @@ export async function GET(req: NextRequest) {
     }
 }
 
+
 // -----------------------------
 // ➕ TẠO DOCUMENT MỚI
 // -----------------------------
 export async function POST(req: NextRequest) {
     try {
+
         // Verify token
-        const token = req.headers.get("authorization")?.replace("Bearer ", "");
+        const cookieStore = await cookies();
+        const token = cookieStore.get('access_token')?.value;
+
         if (!token) {
             return NextResponse.json(
                 { error: "Unauthorized - No token provided" },
@@ -93,12 +96,26 @@ export async function POST(req: NextRequest) {
 
         // Lấy dữ liệu từ body
         const body = await req.json();
-        const { organizationId, title, initialContent } = body;
+        const { title, initialContent, organizationId } = body;
 
         // Validate required fields
         if (!organizationId || !title) {
             return NextResponse.json(
                 { error: "organizationId and title are required" },
+                { status: 400 }
+            );
+        }
+
+        //kiểm tra organizationId có tồn tại không
+        const existingOrganization = await db
+            .select()
+            .from(organizations)
+            .where(eq(organizations.id, organizationId))
+            .limit(1);
+
+        if (!existingOrganization) {
+            return NextResponse.json(
+                { error: "organization isnot existing" },
                 { status: 400 }
             );
         }
@@ -118,6 +135,7 @@ export async function POST(req: NextRequest) {
             data: newDocument[0],
             message: "Document created successfully",
         }, { status: 201 });
+
     } catch (error) {
         console.error("Error creating document:", error);
         return NextResponse.json(
@@ -208,65 +226,3 @@ export async function PUT(req: NextRequest) {
     }
 }
 
-// -----------------------------
-// 🗑️ XÓA DOCUMENT
-// -----------------------------
-export async function DELETE(req: NextRequest) {
-    try {
-        // Verify token
-        const token = req.headers.get("authorization")?.replace("Bearer ", "");
-        if (!token) {
-            return NextResponse.json(
-                { error: "Unauthorized - No token provided" },
-                { status: 401 }
-            );
-        }
-
-        const payload = await verifyToken(token);
-        if (!payload) {
-            return NextResponse.json(
-                { error: "Unauthorized - Invalid token" },
-                { status: 401 }
-            );
-        }
-
-        // Lấy id từ query params
-        const { searchParams } = new URL(req.url);
-        const id = searchParams.get("id");
-
-        if (!id) {
-            return NextResponse.json(
-                { error: "Document id is required" },
-                { status: 400 }
-            );
-        }
-
-        // Kiểm tra document có tồn tại không
-        const existingDocument = await db
-            .select()
-            .from(documents)
-            .where(eq(documents.id, id))
-            .limit(1);
-
-        if (existingDocument.length === 0) {
-            return NextResponse.json(
-                { error: "Document not found" },
-                { status: 404 }
-            );
-        }
-
-        // Xóa document
-        await db.delete(documents).where(eq(documents.id, id));
-
-        return NextResponse.json({
-            success: true,
-            message: "Document deleted successfully",
-        });
-    } catch (error) {
-        console.error("Error deleting document:", error);
-        return NextResponse.json(
-            { error: "Failed to delete document" },
-            { status: 500 }
-        );
-    }
-}

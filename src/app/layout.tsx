@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { TokenRefreshProvider } from "@/components/token-refresh-provider";
-
+import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
 import Providers from "@/components/provider";
@@ -30,6 +30,7 @@ export default function RootLayout({
         <NuqsAdapter>
           <TokenRefreshProvider>
             <Providers>
+              <Toaster />
               {children}
             </Providers>
           </TokenRefreshProvider>

@@ -1,0 +1,26 @@
+### Variables
+@baseUrl = http://localhost:3000
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4ZGQ0MzdmLWFlZGQtNDk2MS05YzQyLTk4NmVlNGIxMDU4MCIsImV4cCI6MTc2MTI5ODIxMiwiaWF0IjoxNzYxMjk3MzEyLCJuYmYiOjE3NjEyOTczMTJ9.ukEy87oraO4NZtDt4JUXRy56pXowjTZ3zpN2V-ich6Q
+
+### get  
+GET  {{baseUrl}}/api/db/organization
+Cookie: access_token={{accessToken}}
+Content-Type: application/json
+
+### tao organization moi
+POST {{baseUrl}}/api/db/organization
+Cookie: access_token={{accessToken}}
+Content-Type: application/json
+
+{
+    "name":"123",
+    "description":""
+}
+
+
+
+
+
+
+
+

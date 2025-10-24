@@ -1,6 +1,6 @@
 ### Variables
 @baseUrl = http://localhost:3000
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4ZGQ0MzdmLWFlZGQtNDk2MS05YzQyLTk4NmVlNGIxMDU4MCIsImV4cCI6MTc2MTI3MjQwNiwiaWF0IjoxNzYxMjcxNTA2LCJuYmYiOjE3NjEyNzE1MDZ9.0P0Vm-NPtBLzrohD9EihBu9qy95p4zR2zSIm7sciyOM
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4ZGQ0MzdmLWFlZGQtNDk2MS05YzQyLTk4NmVlNGIxMDU4MCIsImV4cCI6MTc2MTI4ODAwOSwiaWF0IjoxNzYxMjg3MTA5LCJuYmYiOjE3NjEyODcxMDl9.fBxXKeZocmMICPtifLw8GReAmHQmB5MGRgJms41jvHo
 
 ### get document theo  query pragram organizationId and search 
 GET  {{baseUrl}}/api/db/document/?search=o
@@ -30,13 +30,13 @@ Content-Type: application/json
 
 
 ### update db
-PUT {{baseUrl}}/api/db/document/a3162c38-12b2-43ce-925e-32291f555d3a
+PUT {{baseUrl}}/api/db/document/1967fcdc-69aa-4249-a2fe-2609e108a901
 Cookie: access_token={{accessToken}}
 Content-Type: application/json
 
 {
     "updated":{
-        "title":"Blank Document 1223"
+        "title":"Blan Tài liệu 1223"
     }
 }
 

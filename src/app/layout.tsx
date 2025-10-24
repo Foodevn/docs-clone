@@ -3,7 +3,9 @@ import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { TokenRefreshProvider } from "@/components/token-refresh-provider";
 
+
 import "./globals.css";
+import Providers from "@/components/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,16 +19,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
     <html lang="en">
       <body
         className={inter.className}
       >
+
         <NuqsAdapter>
           <TokenRefreshProvider>
-            {children}
+            <Providers>
+              {children}
+            </Providers>
           </TokenRefreshProvider>
         </NuqsAdapter>
+
       </body>
     </html>
   );

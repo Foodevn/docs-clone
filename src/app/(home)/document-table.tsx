@@ -1,5 +1,4 @@
 import { LoaderIcon } from "lucide-react";
-// import { PaginationStatus } from "convex/react";
 
 import {
     Table,
@@ -11,24 +10,16 @@ import {
 } from "@/components/ui/table";
 
 import { DocumentRow } from "./document-row";
-import { documents } from "@/db/schema";
+import { useDocuments } from "@/hooks/useDocuments";
 
-type Document = typeof documents.$inferSelect;
 
-interface DocumentsTableProps {
-    documents: Document[] | undefined;
-    // loadMore: (numItems: number) => void;
-    // status: PaginationStatus;
-}
+export const DocumentsTable = () => {
+    const organizationId = "319b97ca-67f2-46b8-a978-7b906073667d";
+    const { documents, loading } = useDocuments({ organizationId });
 
-export const DocumentsTable = ({
-    documents,
-    // loadMore,
-    // status
-}: DocumentsTableProps) => {
     return (
         <div className="max-w-screen-xl mx-auto px-16 py-6 flex flex-col gap-5">
-            {documents === undefined ? (
+            {loading === true ? (
                 <div className="flex justify-center items-center h-24">
                     <LoaderIcon className="animate-spin text-muted-foreground size-5" />
                 </div>

@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-// import { useMutation } from "convex/react";
 import {
     Dialog,
     DialogContent,
@@ -11,10 +10,10 @@ import {
     DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
-// import { Id } from "../../convex/_generated/dataModel";
-// import { api } from "../../convex/_generated/api";
 import { Button } from "./ui/button";
 import { documents } from "@/db/schema";
+import { useDocuments } from "@/hooks/useDocuments";
+
 type Document = typeof documents.$inferSelect;
 
 interface RenameDialogProps {
@@ -24,20 +23,28 @@ interface RenameDialogProps {
 }
 
 export const RenameDialog = ({ documentId, initialTitle, children }: RenameDialogProps) => {
-    // const update = useMutation(api.documents.updateById);
-    const [isUpdating, setIsUpdating] = useState(false);
-
-    const [title, setTitle] = useState(initialTitle);
     const [open, setOpen] = useState(false);
+    const [title, setTitle] = useState(initialTitle);
+    const { updateDocumentMutation } = useDocuments({});
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsUpdating(true);
-        // update({ id: documentId, title: title.trim() || "Untitled" })
-        //     .finally(() => {
-        //         setIsUpdating(false);
-        //         setOpen(false);
-        //     });
+    const isUpdating = updateDocumentMutation.isPending;
+
+    const handleSave = (e: React.MouseEvent) => {
+        e.stopPropagation();
+
+        updateDocumentMutation.mutate(
+            {
+                documentId,
+                updated: {
+                    title: title.trim(),
+                },
+            },
+            {
+                onSuccess: () => {
+                    setOpen(false);
+                },
+            }
+        );
     };
 
     return (
@@ -46,39 +53,40 @@ export const RenameDialog = ({ documentId, initialTitle, children }: RenameDialo
                 {children}
             </DialogTrigger>
             <DialogContent>
-                <form onSubmit={onSubmit}>
-                    <DialogHeader>
-                        <DialogTitle>Rename document</DialogTitle>
-                        <DialogDescription>
-                            Enter a new name for this document
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="my-4">
-                        <Input
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Document name"
-                            onClick={(e) => e.stopPropagation()}
-                        />
-                    </div>
-                    <DialogFooter>
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            disabled={isUpdating}
-                            onClick={(e) => { e.stopPropagation(); setOpen(false); }}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            type="submit"
-                            disabled={isUpdating}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            Save
-                        </Button>
-                    </DialogFooter>
-                </form>
+                <DialogHeader>
+                    <DialogTitle>Rename document</DialogTitle>
+                    <DialogDescription>
+                        Enter a new name for this document
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="my-4">
+                    <Input
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="Document name"
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                </div>
+                <DialogFooter>
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        disabled={isUpdating}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setOpen(false);
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        type="submit"
+                        disabled={isUpdating || !title.trim()}
+                        onClick={handleSave}
+                    >
+                        {isUpdating ? "Saving..." : "Save"}
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

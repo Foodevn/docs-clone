@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   Carousel,
   CarouselContent,
@@ -11,38 +9,11 @@ import {
 } from "@/components/ui/carousel";
 import { templates } from "@/constants/templates";
 import { cn } from "@/lib/utils";
+import { useDocuments } from "@/hooks/useDocuments";
+
 
 export const TemplatesGallery = () => {
-  const router = useRouter();
-  const [isCreating, setIsCreating] = useState(false);
-
-
-  const onTemplateClick = async (title: string, initialContent: string, organizationId: string) => {
-
-    try {
-      setIsCreating(true);
-
-      const res = await fetch("/api/db/document", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ title, initialContent, organizationId }),
-      });
-
-      const idNewDoc = await res.json();
-
-      if (idNewDoc.data.id) {
-        console.log(idNewDoc);
-        router.push(`/documents/${idNewDoc.data.id}`);
-      }
-      setIsCreating(false);
-
-    } catch (err) {
-      console.error("Failed to fetch create documents:", err);
-    }
-
-  };
+  const { addDocumentMutation } = useDocuments({});
 
   return (
     <div className="bg-[#F1F3F4]">
@@ -58,13 +29,17 @@ export const TemplatesGallery = () => {
                 <div
                   className={cn(
                     "aspect-[3/4] flex flex-col gap-y-2.5",
-                    isCreating && "pointer-events-none opacity-50"
+                    addDocumentMutation.isPending && "pointer-events-none opacity-50"
                   )}
                 >
                   <button
-                    disabled={isCreating}
+                    disabled={addDocumentMutation.isPending}
                     //TODO: Add proper initial content
-                    onClick={() => onTemplateClick(template.label, "", "319b97ca-67f2-46b8-a978-7b906073667d")}
+                    onClick={() => addDocumentMutation.mutate({
+                      title: template.label,
+                      initialContent: "",
+                      organizationId: "319b97ca-67f2-46b8-a978-7b906073667d"
+                    })}
                     style={{
                       backgroundImage: `url(${template.imageUrl})`,
                       backgroundSize: "cover",

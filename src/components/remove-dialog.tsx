@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-// import { useMutation } from "convex/react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,10 +12,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-// import { Id } from "../../convex/_generated/dataModel";
-// import { api } from "../../convex/_generated/api";
 import { documents } from "@/db/schema";
 import { useRouter } from "next/navigation";
+import { useDocuments } from "@/hooks/useDocuments";
 
 type Document = typeof documents.$inferSelect;
 
@@ -26,28 +25,7 @@ interface RemoveDialogProps {
 
 export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
   const router = useRouter();
-  const [isRemoving, setIsRemoving] = useState(false);
-  const fetchDocuments = async (id: Document["id"]) => {
-    try {
-
-      const url = `/api/db/document/${documentId}`;
-      const docsRes = await fetch(url, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!docsRes.ok) {
-        console.error(`Failed to fetch documents/${documentId}`);
-        return;
-      }
-      router.refresh();
-
-    } catch (err) {
-      console.error("Error fetching documents:", err);
-    }
-  };
+  const { deleteDocumentMutation } = useDocuments({});
 
   return (
     <AlertDialog>
@@ -67,12 +45,10 @@ export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
-            disabled={isRemoving}
+            disabled={deleteDocumentMutation.isPending}
             onClick={(e) => {
               e.stopPropagation();
-              setIsRemoving(true);
-              fetchDocuments(documentId)
-                .finally(() => setIsRemoving(false));
+              deleteDocumentMutation.mutate(documentId)
             }}
           >
             Delete

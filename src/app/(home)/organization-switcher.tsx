@@ -150,7 +150,12 @@ export default function OrganizationSwitcher({
                                     </div>
 
                                     {/* Manage gear */}
-                                    <SettingDialog>
+                                    <SettingDialog
+                                        organizationId={org.id}
+                                        name={org.name}
+                                        description={org.description}
+                                        role={org.role}
+                                    >
                                         <button
                                             title="Manage"
                                             className="invisible group-hover:visible rounded-md p-1 hover:bg-gray-100 focus:visible"
@@ -189,7 +194,8 @@ export default function OrganizationSwitcher({
 
 
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 }

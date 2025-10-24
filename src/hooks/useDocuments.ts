@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useSearchParam } from "./use-search-param";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { documents } from "@/db/schema";
+import { toast } from "sonner";
 
 type Document = typeof documents.$inferSelect;
 
@@ -62,7 +63,11 @@ export function useDocuments({ organizationId }: useDocumentsProps) {
             if (newDoc?.data?.id) {
                 router.push(`/documents/${newDoc.data.id}`);
             }
+            toast.success("Document create");
         },
+        onError: () => {
+            toast.error("Something went wrong");
+        }
     });
 
     // const addDocument = (title: string, initialContent: string, organizationId: string) =>
@@ -77,7 +82,12 @@ export function useDocuments({ organizationId }: useDocumentsProps) {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["documents"] });
+            toast.success("Document removed");
         },
+        onError: () => {
+            toast.error("Something went wrong");
+        }
+
     });
 
 
@@ -109,7 +119,11 @@ export function useDocuments({ organizationId }: useDocumentsProps) {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["documents"] });
+            toast.success("Document updated");
         },
+        onError: () => {
+            toast.error("Something went wrong")
+        }
     });
 
 

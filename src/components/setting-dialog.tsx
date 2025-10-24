@@ -13,37 +13,49 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
 import { useDocuments } from "@/hooks/useDocuments";
+import { useOrganizations } from "@/hooks/use-organization";
 
 
 
 interface SettingDialogProps {
-
-    children: React.ReactNode;
+    organizationId: string,
+    name: string,
+    description: string,
+    role: string,
+    children: React.ReactNode
 }
 
-export const SettingDialog = ({ children }: SettingDialogProps) => {
+export const SettingDialog = ({
+    children,
+    organizationId,
+    name,
+    description,
+    role
+}: SettingDialogProps) => {
     const [open, setOpen] = useState(false);
-    const [title, setTitle] = useState("");
+    // const [title, setTitle] = useState("");
+    const [nameUpdate, setNameUpdate] = useState(name);
+    const [descriptionUpdate, setdescriptionUpdate] = useState(description);
 
     // const { updateDocumentMutation } = useDocuments({});
-    // const isUpdating = updateDocumentMutation.isPending;
+    const { updateOrganizationMutation } = useOrganizations();
+    const isUpdating = updateOrganizationMutation.isPending;
 
     const handleSave = (e: React.MouseEvent) => {
         e.stopPropagation();
 
-        // updateDocumentMutation.mutate(
-        //     {
-        //         documentId,
-        //         updated: {
-        //             title: title.trim(),
-        //         },
-        //     },
-        //     {
-        //         onSuccess: () => {
-        //             setOpen(false);
-        //         },
-        //     }
-        // );
+        updateOrganizationMutation.mutate(
+            {
+                organizationId,
+                name: nameUpdate,
+                description: descriptionUpdate,
+            },
+            {
+                onSuccess: () => {
+                    setOpen(false);
+                },
+            }
+        );
     };
 
     return (
@@ -55,14 +67,21 @@ export const SettingDialog = ({ children }: SettingDialogProps) => {
                 <DialogHeader>
                     <DialogTitle>Setting Organization</DialogTitle>
                 </DialogHeader>
-                <div className="my-4">
+                <div className="my-4 ">
                     <Input
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Document name"
+                        value={nameUpdate}
+                        onChange={(e) => setNameUpdate(e.target.value)}
+                        placeholder="Organization name"
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                    <Input
+                        value={descriptionUpdate}
+                        onChange={(e) => setdescriptionUpdate(e.target.value)}
+                        placeholder="Organization description"
                         onClick={(e) => e.stopPropagation()}
                     />
                 </div>
+
                 <DialogFooter>
                     <Button
                         type="button"
@@ -76,12 +95,32 @@ export const SettingDialog = ({ children }: SettingDialogProps) => {
                         Cancel
                     </Button>
                     <Button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setOpen(false);
+                        }}
+                    >
+                        Leave
+                    </Button>
+                    {role.trim().toLowerCase() === "admin" && (<Button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setOpen(false);
+                        }}
+                    >
+                        Remove
+                    </Button>)}
+
+                    <Button
                         type="submit"
-                        // disabled={isUpdating || !title.trim()}
+                        disabled={isUpdating || !name.trim()}
                         onClick={handleSave}
                     >
-                        {/* {isUpdating ? "Saving..." : "Save"} */}Save
+                        {isUpdating ? "Saving..." : "Save"}
                     </Button>
+
                 </DialogFooter>
             </DialogContent>
         </Dialog>

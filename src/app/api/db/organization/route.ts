@@ -47,7 +47,6 @@ export async function GET(req: NextRequest) {
     }
 }
 
-
 export async function POST(req: NextRequest) {
     try {
         // Verify token
@@ -115,3 +114,4 @@ export async function POST(req: NextRequest) {
         );
     }
 }
+

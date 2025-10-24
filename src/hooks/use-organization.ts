@@ -9,6 +9,7 @@ import { useState } from "react";
 interface Organization {
     id: string,
     name: string,
+    description: string,
     updatedAt: number,
     role: string,
 }
@@ -32,8 +33,10 @@ export function useOrganizations() {
             const result = data.userOrganizationsDS.map((item: any) => ({
                 id: item.organizations.id,
                 name: item.organizations.name,
+                description: item.organizations.description,
                 updatedAt: item.organizations.updatedAt,
                 role: item.user_organizations.role,
+
             }));
 
             return result as Organization[];
@@ -57,11 +60,47 @@ export function useOrganizations() {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["organizations"] });
+
         },
     });
 
+    // ...existing code...
+    const updateOrganizationMutation = useMutation({
+        mutationFn: async ({
+            organizationId,
+            name,
+            description,
+        }: {
+            organizationId: string;
+            name?: string;
+            description?: string;
+        }) => {
+            const res = await fetch(`/api/db/organization/${organizationId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    updated: { name, description }
+                }),
+            });
 
+            if (!res.ok) {
+                throw new Error("Failed to update organization");
+            }
 
+            return res.json();
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["organizations"] });
+            // Optionally update the current organization if it was updated
+            if (current?.id === data.data.id) {
+                setCurrent({
+                    ...current,
+                    name: data.data.name,
+                    updatedAt: new Date(data.data.updatedAt).getTime(),
+                } as Organization);
+            }
+        },
+    });
 
 
     return {
@@ -71,5 +110,6 @@ export function useOrganizations() {
         current,
         setCurrent,
         addOrganizationMutation,
+        updateOrganizationMutation
     };
 }

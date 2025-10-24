@@ -1,6 +1,6 @@
 ### Variables
 @baseUrl = http://localhost:3000
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4ZGQ0MzdmLWFlZGQtNDk2MS05YzQyLTk4NmVlNGIxMDU4MCIsImV4cCI6MTc2MTI5ODIxMiwiaWF0IjoxNzYxMjk3MzEyLCJuYmYiOjE3NjEyOTczMTJ9.ukEy87oraO4NZtDt4JUXRy56pXowjTZ3zpN2V-ich6Q
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4ZGQ0MzdmLWFlZGQtNDk2MS05YzQyLTk4NmVlNGIxMDU4MCIsImV4cCI6MTc2MTMzMTc3OSwiaWF0IjoxNzYxMzMwODc5LCJuYmYiOjE3NjEzMzA4Nzl9.F9Pp7Ua4HO3_vswdbWt7IvryoKFNGVK8H1-YDlwci2g
 
 ### get  
 GET  {{baseUrl}}/api/db/organization
@@ -17,6 +17,21 @@ Content-Type: application/json
     "description":""
 }
 
+### update organization
+PUT {{baseUrl}}/api/db/organization/b0b4a242-6de2-490f-ac85-0df68d862478
+Cookie: access_token={{accessToken}}
+Content-Type: application/json
+{
+    "updated":{
+        "name":"12344qqq2134",
+        "description":"123"
+    }
+}
+
+### delete org
+DELETE  {{baseUrl}}/api/db/organization/b0b4a242-6de2-490f-ac85-0df68d862478
+Cookie: access_token={{accessToken}}
+Content-Type: application/json
 
 
 

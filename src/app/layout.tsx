@@ -4,7 +4,10 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { TokenRefreshProvider } from "@/components/token-refresh-provider";
 import { Toaster } from "@/components/ui/sonner";
 
+import "@liveblocks/react-ui/styles.css";
+import "@liveblocks/react-tiptap/styles.css";
 import "./globals.css";
+
 import Providers from "@/components/provider";
 
 const inter = Inter({ subsets: ["latin"] });

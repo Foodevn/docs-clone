@@ -48,8 +48,11 @@ export function useDocuments({ organizationId }: useDocumentsProps) {
         }: {
             title: string;
             initialContent: string;
-            organizationId: string;
+            organizationId?: string;
         }) => {
+            if (!organizationId) {
+                return
+            }
             const res = await fetch(`/api/db/document`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -81,7 +84,7 @@ export function useDocuments({ organizationId }: useDocumentsProps) {
             });
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["documents"] });
+            queryClient.invalidateQueries({ queryKey: ["documents", organizationId] });
             toast.success("Document removed");
         },
         onError: () => {
@@ -118,7 +121,7 @@ export function useDocuments({ organizationId }: useDocumentsProps) {
             return res.json();
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["documents"] });
+            queryClient.invalidateQueries({ queryKey: ["documents", organizationId] });
             toast.success("Document updated");
         },
         onError: () => {

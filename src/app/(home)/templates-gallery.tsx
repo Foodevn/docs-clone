@@ -10,10 +10,12 @@ import {
 import { templates } from "@/constants/templates";
 import { cn } from "@/lib/utils";
 import { useDocuments } from "@/hooks/useDocuments";
+import { useOrganizations } from "@/hooks/use-organization";
 
 
 export const TemplatesGallery = () => {
   const { addDocumentMutation } = useDocuments({});
+  const { current } = useOrganizations();
 
   return (
     <div className="bg-[#F1F3F4]">
@@ -38,7 +40,7 @@ export const TemplatesGallery = () => {
                     onClick={() => addDocumentMutation.mutate({
                       title: template.label,
                       initialContent: "",
-                      organizationId: "319b97ca-67f2-46b8-a978-7b906073667d"
+                      organizationId: current?.id
                     })}
                     style={{
                       backgroundImage: `url(${template.imageUrl})`,

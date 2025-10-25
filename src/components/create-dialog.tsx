@@ -89,7 +89,7 @@ export const CreateDialog = ({ children }: CreateDialogProps) => {
                         disabled={isUpdating || !name.trim()}
                         onClick={handleSave}
                     >
-                        {isUpdating ? "Saving..." : "Save"} Save
+                        {isUpdating ? "Saving..." : "Save"}
                     </Button>
                 </DialogFooter>
             </DialogContent>

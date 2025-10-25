@@ -8,37 +8,31 @@ import { SettingDialog } from "@/components/setting-dialog";
 
 export type OrgRole = "Owner" | "Admin" | "Member" | string;
 
-// 🔹 Hàm lưu current organization vào localStorage
-const saveCurrentOrgToLocalStorage = (orgId: string) => {
-    try {
-        localStorage.setItem("currentOrgId", orgId);
-    } catch (error) {
-        console.error("Failed to save organization to localStorage:", error);
-    }
-};
+// // 🔹 Hàm lưu current organization vào localStorage
+// const saveCurrentOrgToLocalStorage = (orgId: string) => {
+//     try {
+//         localStorage.setItem("currentOrgId", orgId);
+//     } catch (error) {
+//         console.error("Failed to save organization to localStorage:", error);
+//     }
+// };
 
-// 🔹 Hàm lấy current organization từ localStorage
-const getCurrentOrgFromLocalStorage = (): string | null => {
-    try {
-        return localStorage.getItem("currentOrgId");
-    } catch (error) {
-        console.error("Failed to get organization from localStorage:", error);
-        return null;
-    }
-};
+// // 🔹 Hàm lấy current organization từ localStorage
+// const getCurrentOrgFromLocalStorage = (): string | null => {
+//     try {
+//         return localStorage.getItem("currentOrgId");
+//     } catch (error) {
+//         console.error("Failed to get organization from localStorage:", error);
+//         return null;
+//     }
+// };
 
 export interface OrganizationSwitcherProps {
-    currentOrgId?: string;
     className?: string;
-    onCreate?: () => void; // optional – called when user clicks "Create organization"
-    onManage?: (orgId: string) => void; // optional – called when user clicks Manage gear
 }
 
 export default function OrganizationSwitcher({
-    currentOrgId,
     className,
-    onCreate,
-    onManage,
 }: OrganizationSwitcherProps) {
 
     const [open, setOpen] = useState(false);
@@ -46,18 +40,12 @@ export default function OrganizationSwitcher({
     const menuRef = useRef<HTMLDivElement | null>(null);
     const { organizations, current, setCurrent } = useOrganizations();
 
-    // 🔹 Khởi tạo current từ localStorage khi component mount
     useEffect(() => {
-        const savedOrgId = getCurrentOrgFromLocalStorage();
-        if (savedOrgId && organizations.length > 0) {
-            const savedOrg = organizations.find((o) => o.id === savedOrgId);
-            if (savedOrg) {
-                setCurrent(savedOrg);
-            }
+        if (organizations.length > 0 && !current) {
+            setCurrent(organizations[0]);
         }
-    }, [organizations, setCurrent]);
+    }, [organizations]);
 
-    // Close on outside click
     useEffect(() => {
         function onDocClick(e: MouseEvent) {
             if (!open) return;
@@ -75,7 +63,6 @@ export default function OrganizationSwitcher({
     }, [open]);
 
     function Avatar({ name }: { name: string }) {
-
         const initials = name
             .split(" ")
             .map((s) => s[0])
@@ -90,18 +77,16 @@ export default function OrganizationSwitcher({
     }
 
     const defaultButtonLabel = () => {
-        if (organizations.length == 0)
+        if (organizations.length == 0 || !current)
             return;
-        if (!current)
-            saveCurrentOrgToLocalStorage(organizations[0].id);
         return (
             <div className="flex items-center gap-2">
-                <Avatar name={current?.name || organizations[0].name} />
-                <span className="truncate max-w-[140px] text-sm font-medium">{current?.name || organizations[0].name}</span>
+                <Avatar name={current?.name} />
+                <span className="truncate max-w-[140px] text-sm font-medium">{current?.name}</span>
             </div>
         );
     }
-
+    console.log({ current });
     return (
         <div className={"relative inline-block text-left " + (className ?? "")}>
             {/* Toggle button */}
@@ -130,9 +115,8 @@ export default function OrganizationSwitcher({
                                 role="menuitem"
                                 tabIndex={-1}
                                 onClick={() => {
-                                    // onSelect(org.id);
+                                    // setOpen(false);
                                     setCurrent(org);
-                                    saveCurrentOrgToLocalStorage(org.id);
                                 }}
                                 className={
                                     "group flex items-center gap-3 px-3 py-2 cursor-pointer outline-none hover:bg-gray-50"

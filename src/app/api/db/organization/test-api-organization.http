@@ -1,6 +1,6 @@
 ### Variables
 @baseUrl = http://localhost:3000
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4ZGQ0MzdmLWFlZGQtNDk2MS05YzQyLTk4NmVlNGIxMDU4MCIsImV4cCI6MTc2MTMzMTc3OSwiaWF0IjoxNzYxMzMwODc5LCJuYmYiOjE3NjEzMzA4Nzl9.F9Pp7Ua4HO3_vswdbWt7IvryoKFNGVK8H1-YDlwci2g
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4ZGQ0MzdmLWFlZGQtNDk2MS05YzQyLTk4NmVlNGIxMDU4MCIsImV4cCI6MTc2MTM3NDcxMiwiaWF0IjoxNzYxMzczODEyLCJuYmYiOjE3NjEzNzM4MTJ9.GOX3Fz_Ew1rYyx9igj5CrJv7-PprT0deqPg8cxBsWR8
 
 ### get  
 GET  {{baseUrl}}/api/db/organization
@@ -29,12 +29,18 @@ Content-Type: application/json
 }
 
 ### delete org
-DELETE  {{baseUrl}}/api/db/organization/b0b4a242-6de2-490f-ac85-0df68d862478
+DELETE  {{baseUrl}}/api/db/organization/65f5cde7-f066-4361-bbc1-6bdde567ccb8
 Cookie: access_token={{accessToken}}
 Content-Type: application/json
 
+### Thêm 1 user vào org
+POST  {{baseUrl}}/api/db/organization/b0b4a242-6de2-490f-ac85-0df68d862478
+Cookie: access_token={{accessToken}}
+Content-Type: application/json
 
-
+{
+    "email":"hoangphuc091805630@gmail.com"
+}
 
 
 

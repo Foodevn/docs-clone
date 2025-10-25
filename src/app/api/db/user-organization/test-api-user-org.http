@@ -1,0 +1,12 @@
+### Variables
+@baseUrl = http://localhost:3000
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4ZGQ0MzdmLWFlZGQtNDk2MS05YzQyLTk4NmVlNGIxMDU4MCIsImV4cCI6MTc2MTM3NDcxMiwiaWF0IjoxNzYxMzczODEyLCJuYmYiOjE3NjEzNzM4MTJ9.GOX3Fz_Ew1rYyx9igj5CrJv7-PprT0deqPg8cxBsWR8
+
+### xóa 1 member ra khỏi tổ chức
+DELETE  {{baseUrl}}/api/db/user-organization/67dc7ee6-d593-4970-b97a-597342e209b7
+Cookie: access_token={{accessToken}}
+Content-Type: application/json
+
+{
+    "userId":"244d3eef-36d0-4b89-96fd-fa5c8ffba475"
+}

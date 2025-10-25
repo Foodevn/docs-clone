@@ -16,7 +16,7 @@ interface Organization {
 
 
 export function useOrganizations() {
-    const router = useRouter();
+
     const queryClient = useQueryClient();
     const [current, setCurrent] = useState<Organization>();
 
@@ -102,6 +102,30 @@ export function useOrganizations() {
         },
     });
 
+    const deleteOrganizationMutation = useMutation({
+        mutationFn: async (organizationId: string) => {
+            const res = await fetch(`/api/db/organization/${organizationId}`, {
+                method: "DELETE",
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to delete organization");
+            }
+
+            return res.json();
+        },
+        onSuccess: (data, organizationId) => {
+            queryClient.invalidateQueries({ queryKey: ["organizations"] });
+
+            // Clear current organization if it was deleted
+            if (current?.id === organizationId) {
+                setCurrent(undefined);
+            }
+
+            // Optional: redirect to organizations list
+            // router.push("/organizations");
+        },
+    });
 
     return {
         organizations,
@@ -110,6 +134,7 @@ export function useOrganizations() {
         current,
         setCurrent,
         addOrganizationMutation,
-        updateOrganizationMutation
+        updateOrganizationMutation,
+        deleteOrganizationMutation
     };
 }

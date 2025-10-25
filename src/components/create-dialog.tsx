@@ -58,19 +58,17 @@ export const CreateDialog = ({ children }: CreateDialogProps) => {
                         Enter a new name for this organization
                     </DialogDescription>
                 </DialogHeader>
-                <div className="my-4">
+                <div className="my-4 space-y-3">
                     <Input
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Organization name"
                         onClick={(e) => e.stopPropagation()}
                     />
-                </div>
-                <div className="my-4">
                     <Input
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder="Organization name"
+                        placeholder="Organization description"
                         onClick={(e) => e.stopPropagation()}
                     />
                 </div>

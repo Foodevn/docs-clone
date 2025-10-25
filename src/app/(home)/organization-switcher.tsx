@@ -155,6 +155,7 @@ export default function OrganizationSwitcher({
                                         name={org.name}
                                         description={org.description}
                                         role={org.role}
+
                                     >
                                         <button
                                             title="Manage"

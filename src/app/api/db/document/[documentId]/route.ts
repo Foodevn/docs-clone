@@ -30,7 +30,7 @@ export async function GET(
     }
 
     const { organizationId } = await context.params;
-    console.log(organizationId);
+
 
     return NextResponse.json({
         message: "OK",

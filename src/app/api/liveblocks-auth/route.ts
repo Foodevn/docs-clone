@@ -99,11 +99,12 @@ export async function POST(req: NextRequest) {
             );
         }
 
+        const url = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.name ?? user.email ?? "A")}`; // Generate avatar from name;
         // 6️⃣ Create Liveblocks session
         const session = liveblocks.prepareSession(userId, {
             userInfo: {
-                name: user.name ?? "Anonymous",
-                email: user.email,
+                name: user.name ?? user.email ?? "Anonymous",
+                avatar: user.imageUrl?.toString() || url,
                 // avatar: user.avatar, // Add if you have avatar field
             },
         });

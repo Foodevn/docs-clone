@@ -4,7 +4,38 @@ import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/jwt";
 import { db } from "@/db";
 import { users, userOrganizations, documents } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, inArray } from "drizzle-orm";
+
+/**
+ * Get multiple documents by their IDs
+ * @param ids - Array of document IDs to fetch
+ */
+export async function getDocuments(ids: string[]) {
+    try {
+        if (!ids || ids.length === 0) {
+            return [];
+        }
+
+        // Query documents from database using Drizzle ORM with inArray
+        const foundDocuments = await db
+            .select({
+                id: documents.id,
+                title: documents.title,
+                initialContent: documents.initialContent,
+                organizationId: documents.organizationId,
+                createdAt: documents.createdAt,
+                updatedAt: documents.updatedAt,
+            })
+            .from(documents)
+            .where(inArray(documents.id, ids));
+
+        return foundDocuments;
+    } catch (error) {
+        console.error("Error getting documents:", error);
+        return [];
+    }
+}
+
 
 /**
  * Get all users in the document's organization

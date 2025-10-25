@@ -41,6 +41,8 @@ import { useEditorStore } from "@/store/use-editor-store";
 import { UserButton } from "@/components/user-component"
 import OrganizationSwitcher from "../../(home)/organization-switcher";
 import { Avatars } from "./avatars";
+import { Inbox } from "./inbox";
+
 
 export const Navbar = () => {
   const { editor } = useEditorStore();
@@ -230,6 +232,7 @@ export const Navbar = () => {
       </div>
       <div className="flex gap-3 items-center pl-6">
         <Avatars />
+        <Inbox />
         {/* <OrganizationSwitcher /> */}
         <UserButton />
       </div>

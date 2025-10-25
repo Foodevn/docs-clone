@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, Plus, Settings } from "lucide-react";
-import { useOrganizations } from "@/hooks/use-organization";
+import { useCurrentOrganization } from "@/contexts/organization-context";
 import { CreateDialog } from "@/components/create-dialog";
 import { SettingDialog } from "@/components/setting-dialog";
 
@@ -38,13 +38,14 @@ export default function OrganizationSwitcher({
     const [open, setOpen] = useState(false);
     const buttonRef = useRef<HTMLButtonElement | null>(null);
     const menuRef = useRef<HTMLDivElement | null>(null);
-    const { organizations, current, setCurrent } = useOrganizations();
+    const { organizations, current, setCurrent } = useCurrentOrganization();
 
-    useEffect(() => {
-        if (organizations.length > 0 && !current) {
-            setCurrent(organizations[0]);
-        }
-    }, [organizations]);
+    // This effect is now handled in OrganizationProvider
+    // useEffect(() => {
+    //     if (organizations.length > 0 && !current) {
+    //         setCurrent(organizations[0]);
+    //     }
+    // }, [organizations]);
 
     useEffect(() => {
         function onDocClick(e: MouseEvent) {
@@ -86,7 +87,7 @@ export default function OrganizationSwitcher({
             </div>
         );
     }
-    console.log({ current });
+    // console.log({ current });
     return (
         <div className={"relative inline-block text-left " + (className ?? "")}>
             {/* Toggle button */}

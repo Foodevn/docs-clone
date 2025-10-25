@@ -11,14 +11,14 @@ import {
 
 import { DocumentRow } from "./document-row";
 import { useDocuments } from "@/hooks/useDocuments";
-import { useOrganizations } from "@/hooks/use-organization";
 
 
 export const DocumentsTable = () => {
-    const organizationId = "319b97ca-67f2-46b8-a978-7b906073667d";
-    const { current } = useOrganizations();
-    const { documents, loading } = useDocuments({ organizationId: current?.id });
+    // const { current } = useOrganizations();
+    // { organizationId: current?.id }
+    const { documents, loading } = useDocuments();
 
+    console.log({ documents }); // Debug
     return (
         <div className="max-w-screen-xl mx-auto px-16 py-6 flex flex-col gap-5">
             {loading === true ? (

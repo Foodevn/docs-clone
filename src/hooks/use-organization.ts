@@ -1,10 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { organizations } from "@/db/schema";
-import { useState } from "react";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface Organization {
     id: string,
@@ -14,34 +10,8 @@ interface Organization {
     role: string,
 }
 
-
 export function useOrganizations() {
-
     const queryClient = useQueryClient();
-    const [current, setCurrent] = useState<Organization>();
-
-    // 📌 GET organizations (LIST)
-    const {
-        data: organizations = [] as Organization[],
-        isLoading: loading,
-        error,
-    } = useQuery<Organization[]>({
-        queryKey: ["organizations"],
-        queryFn: async () => {
-            const res = await fetch("/api/db/organization");
-            const data = await res.json();
-            const result = data.userOrganizationsDS.map((item: any) => ({
-                id: item.organizations.id,
-                name: item.organizations.name,
-                description: item.organizations.description,
-                updatedAt: item.organizations.updatedAt,
-                role: item.user_organizations.role,
-
-            }));
-
-            return result as Organization[];
-        },
-    });
 
     // 📌 CREATE Organization
     const addOrganizationMutation = useMutation({
@@ -91,14 +61,6 @@ export function useOrganizations() {
         },
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ["organizations"] });
-            // Optionally update the current organization if it was updated
-            if (current?.id === data.data.id) {
-                setCurrent({
-                    ...current,
-                    name: data.data.name,
-                    updatedAt: new Date(data.data.updatedAt).getTime(),
-                } as Organization);
-            }
         },
     });
 
@@ -116,23 +78,10 @@ export function useOrganizations() {
         },
         onSuccess: (data, organizationId) => {
             queryClient.invalidateQueries({ queryKey: ["organizations"] });
-
-            // Clear current organization if it was deleted
-            if (current?.id === organizationId) {
-                setCurrent(undefined);
-            }
-
-            // Optional: redirect to organizations list
-            // router.push("/organizations");
         },
     });
 
     return {
-        organizations,
-        loading,
-        error,
-        current,
-        setCurrent,
         addOrganizationMutation,
         updateOrganizationMutation,
         deleteOrganizationMutation

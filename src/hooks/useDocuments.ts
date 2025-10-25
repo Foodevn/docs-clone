@@ -5,21 +5,28 @@ import { useSearchParam } from "./use-search-param";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { documents } from "@/db/schema";
 import { toast } from "sonner";
+import { useCurrentOrganization } from "@/contexts/organization-context";
+import { useEffect } from "react";
 
 type Document = typeof documents.$inferSelect;
 
 interface useDocumentsProps {
-    organizationId?: string;
+    // organizationId?: string;
 }
 
-export function useDocuments({ organizationId }: useDocumentsProps) {
+export function useDocuments() {
     const router = useRouter();
     const queryClient = useQueryClient();
     const [search] = useSearchParam();
+    const { current } = useCurrentOrganization();
+
+    const organizationId = current?.id;
+    console.log({ organizationId });
 
     // 📌 Build URL GET
     const buildUrl = () => {
         const params = new URLSearchParams();
+        if (organizationId) params.append("organizationId", organizationId);
         if (search && search.trim() !== "") params.append("search", search);
         return `/api/db/document${params.toString() ? `?${params.toString()}` : ""}`;
     };
@@ -37,6 +44,7 @@ export function useDocuments({ organizationId }: useDocumentsProps) {
             return data.allDocuments ?? [] as Document[];
         },
         enabled: !!organizationId, // chỉ fetch khi có orgId
+
     });
 
     // 📌 CREATE document
@@ -44,11 +52,9 @@ export function useDocuments({ organizationId }: useDocumentsProps) {
         mutationFn: async ({
             title,
             initialContent,
-            organizationId,
         }: {
             title: string;
             initialContent: string;
-            organizationId?: string;
         }) => {
             if (!organizationId) {
                 return

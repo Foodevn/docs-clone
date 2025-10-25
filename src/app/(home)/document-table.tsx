@@ -11,7 +11,7 @@ import {
 
 import { DocumentRow } from "./document-row";
 import { useDocuments } from "@/hooks/useDocuments";
-
+import { Button } from "@/components/ui/button";
 
 export const DocumentsTable = () => {
     // const { current } = useOrganizations();
@@ -52,6 +52,16 @@ export const DocumentsTable = () => {
                     )}
                 </Table>
             )}
+            {/* <div className="flex items-center justify-center">
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => loadMore(5)}
+                    disabled={status !== "CanLoadMore"}
+                >
+                    {status === "CanLoadMore" ? "Load more" : "End of results"}
+                </Button>
+            </div> */}
         </div>
     );
 };

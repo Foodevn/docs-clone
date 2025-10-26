@@ -8,7 +8,7 @@ import { cookies } from 'next/headers';
 
 export async function GET(
     req: Request,
-    context: { params: Promise<{ organizationId: string }> }
+    context: { params: Promise<{ documentId: string }> }
 ) {
     // Verify token
     const cookieStore = await cookies();
@@ -29,12 +29,13 @@ export async function GET(
         );
     }
 
-    const { organizationId } = await context.params;
+    const { documentId } = await context.params;
+
 
 
     return NextResponse.json({
         message: "OK",
-        organizationId
+
     });
 }
 

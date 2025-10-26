@@ -25,7 +25,7 @@ interface RemoveDialogProps {
 
 export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
   const router = useRouter();
-  const { deleteDocumentMutation } = useDocuments({});
+  const { deleteDocumentMutation } = useDocuments();
 
   return (
     <AlertDialog>

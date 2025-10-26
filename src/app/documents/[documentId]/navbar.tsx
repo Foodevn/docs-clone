@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { BsFilePdf } from "react-icons/bs";
 import {
   BoldIcon,
@@ -36,16 +38,27 @@ import {
 } from "@/components/ui/menubar";
 
 import { DocumentInput } from "./document-input";
+import { getDocumentById } from "./actions";
 
 import { useEditorStore } from "@/store/use-editor-store";
 import { UserButton } from "@/components/user-component"
-import OrganizationSwitcher from "../../(home)/organization-switcher";
+
 import { Avatars } from "./avatars";
 import { Inbox } from "./inbox";
 
 
+
 export const Navbar = () => {
   const { editor } = useEditorStore();
+  const params = useParams();
+  const documentId = params.documentId as string;
+
+  // Fetch document data using Server Action
+  const { data: documentData } = useQuery({
+    queryKey: ["document", documentId],
+    queryFn: () => getDocumentById(documentId),
+    enabled: !!documentId,
+  });
 
   const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
     editor
@@ -93,6 +106,7 @@ export const Navbar = () => {
     onDownload(blob, `document.txt`); //TODO: Use document name
   };
 
+
   return (
     <nav className="flex items-center justify-between">
       <div className="flex gap-2 items-center">
@@ -100,7 +114,10 @@ export const Navbar = () => {
           <Image src="/logo.svg" alt="Logo" width={36} height={36} />
         </Link>
         <div className="flex flex-col">
-          <DocumentInput />
+          <DocumentInput
+            title={documentData?.title || "Untitled Document"}
+            id={documentId}
+          />
           <div className="flex">
             <Menubar className="border-none bg-transparent shadow-none h-auto p-0">
               <MenubarMenu>

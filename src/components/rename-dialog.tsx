@@ -25,7 +25,7 @@ interface RenameDialogProps {
 export const RenameDialog = ({ documentId, initialTitle, children }: RenameDialogProps) => {
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState(initialTitle);
-    const { updateDocumentMutation } = useDocuments({});
+    const { updateDocumentMutation } = useDocuments();
 
     const isUpdating = updateDocumentMutation.isPending;
 

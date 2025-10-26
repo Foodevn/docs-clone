@@ -4,9 +4,23 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+// ✅ Define User interface
+interface User {
+    id: string;
+    email: string;
+    name: string | null;
+    avatar?: string;
+    imageUrl?: string;
+}
+
+// ✅ Define API response type
+interface GetUserResponse {
+    user: User;
+}
+
 export const UserButton = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
 
@@ -16,7 +30,7 @@ export const UserButton = () => {
             try {
                 const res = await fetch("/api/auth/me");
                 if (res.ok) {
-                    const data = await res.json();
+                    const data: GetUserResponse = await res.json();
                     setUser(data.user);
                 }
             } catch (error) {
@@ -24,12 +38,6 @@ export const UserButton = () => {
             }
         };
         fetchUser();
-        // setUser({
-        //     id: "1",
-        //     email: "admin@gmail.com",
-        //     name: "Admin User",
-
-        // })
     }, []);
 
 
@@ -61,8 +69,14 @@ export const UserButton = () => {
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold hover:bg-blue-600 transition"
             >
-                {user.avatar ? (
-                    <Image src={user.avatar} alt="Avatar" width={40} height={40} className="rounded-full" />
+                {user.avatar || user.imageUrl ? (
+                    <Image
+                        src={user.avatar || user.imageUrl || ""}
+                        alt="Avatar"
+                        width={40}
+                        height={40}
+                        className="rounded-full"
+                    />
                 ) : (
                     <span>{user.email?.[0]?.toUpperCase()}</span>
                 )}

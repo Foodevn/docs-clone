@@ -11,10 +11,9 @@ import {
 } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { documents } from "@/db/schema";
 import { useOrganizations } from "@/hooks/use-organization";
 
-type Document = typeof documents.$inferSelect;
+
 
 interface CreateDialogProps {
 

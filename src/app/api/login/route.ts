@@ -3,7 +3,6 @@ import { users, refreshTokens } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { signToken } from "@/lib/jwt";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {

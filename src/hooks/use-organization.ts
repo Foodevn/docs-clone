@@ -2,13 +2,6 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-interface Organization {
-    id: string,
-    name: string,
-    description: string,
-    updatedAt: number,
-    role: string,
-}
 
 export function useOrganizations() {
     const queryClient = useQueryClient();
@@ -22,7 +15,7 @@ export function useOrganizations() {
             name: string;
             description: string;
         }) => {
-            const res = await fetch(`/api/db/organization`, {
+            await fetch(`/api/db/organization`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, description }),
@@ -59,7 +52,7 @@ export function useOrganizations() {
 
             return res.json();
         },
-        onSuccess: (data) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["organizations"] });
         },
     });
@@ -76,7 +69,7 @@ export function useOrganizations() {
 
             return res.json();
         },
-        onSuccess: (data, organizationId) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["organizations"] });
         },
     });

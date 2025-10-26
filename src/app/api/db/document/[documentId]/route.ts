@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { documents } from "@/db/schema";
-import { eq, and, desc } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { verifyToken } from "@/lib/jwt";
-
 import { cookies } from 'next/headers';
 
+// ✅ Type for partial document update
+type DocumentUpdate = Partial<Pick<typeof documents.$inferInsert, 'title' | 'initialContent'>> & {
+    updatedAt: Date;
+};
+
 export async function GET(
-    req: Request,
-    context: { params: Promise<{ documentId: string }> }
+
 ) {
     // Verify token
     const cookieStore = await cookies();
@@ -29,7 +32,7 @@ export async function GET(
         );
     }
 
-    const { documentId } = await context.params;
+    // const { documentId } = await context.params;
 
 
 
@@ -164,7 +167,7 @@ export async function PUT(
         }
 
         // Cập nhật document
-        const updateData: any = {
+        const updateData: DocumentUpdate = {
             updatedAt: new Date(),
         };
 

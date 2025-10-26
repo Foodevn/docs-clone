@@ -1,24 +1,28 @@
+"use client";
+
+import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { SearchInput } from "./search-input";
 import { UserButton } from "../../components/user-component"
 import OrganizationSwitcher from "./organization-switcher";
-import { useRouter } from "next/navigation";
 
 export const Navbar = () => {
-  const router = useRouter();
-
-
-
   return (
     <nav className="flex items-center justify-between h-full w-full">
       <div className="flex gap-3 items-center shrink-0 pr-6">
-        <Link href="/">
+        <Link href="/" className="flex gap-2">
           <Image src="/logo.svg" alt="Logo" width={36} height={36} />
-          <h3 className="text-xl">Docs</h3>
+          <div className="text-xl">Docs</div>
         </Link>
       </div>
-      <SearchInput />
+      <Suspense fallback={
+        <div className="flex-1 flex items-center justify-center">
+          <div className="max-w-[720px] w-full h-[48px] bg-[#F0F4F8] rounded-full animate-pulse" />
+        </div>
+      }>
+        <SearchInput />
+      </Suspense>
       <div className="flex gap-3 items-center pl-6">
         <OrganizationSwitcher />
         <UserButton />

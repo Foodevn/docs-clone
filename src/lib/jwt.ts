@@ -10,6 +10,20 @@ if (!SECRET) {
 const getSecretKey = () => new TextEncoder().encode(SECRET);
 
 /**
+ * JWT Payload Interface
+ */
+export interface JWTPayload {
+    userId?: string;
+    id?: string;
+    email?: string;
+    role?: string;
+    exp?: number;
+    iat?: number;
+    nbf?: number;
+    [key: string]: unknown;
+}
+
+/**
  * Tạo JWT token
  */
 export async function signToken(payload: object, expiresIn: string = "1h"): Promise<string> {
@@ -27,10 +41,10 @@ export async function signToken(payload: object, expiresIn: string = "1h"): Prom
 /**
  * Xác thực và giải mã JWT token
  */
-export async function verifyToken(token: string): Promise<any | null> {
+export async function verifyToken(token: string): Promise<JWTPayload | null> {
     try {
         const { payload } = await jwtVerify(token, getSecretKey());
-        return payload;
+        return payload as JWTPayload;
     } catch (err) {
         console.error("Lỗi xác thực token:", err);
         return null;

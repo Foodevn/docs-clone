@@ -7,7 +7,6 @@ export async function middleware(req: NextRequest) {
     const refresh = req.cookies.get("refresh_token")?.value;
     const url = req.nextUrl.clone();
     const pathname = url.pathname;
-    let isAuthenticated = false;
 
     // Các route công khai — không cần xác thực
     const publicPaths = ["/sign-in", "/sign-up", "/api/login", "/api/register", "/api/refresh", "/static", "/favicon.ico"];

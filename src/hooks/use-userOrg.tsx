@@ -1,22 +1,44 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { organizations } from "@/db/schema";
-import { useState } from "react";
 import { toast } from "sonner";
 
 interface Member {
-    id: string,
-    name: string,
-    email: string,
-    avatarUrl?: string,
-    joinedAt: number,
-    role: string,
+    id: string;
+    name: string;
+    email: string;
+    avatarUrl?: string;
+    joinedAt: number;
+    role: string;
+}
+
+// ✅ Define API response types
+interface OrganizationMemberData {
+    users: {
+        id: string;
+        name: string;
+        email: string;
+        imageUrl?: string;
+    };
+    user_organizations: {
+        joinedAt: Date;
+        role: string;
+    };
+}
+
+interface GetMembersResponse {
+    data: OrganizationMemberData[];
+}
+
+interface AddMemberResponse {
+    success: boolean;
+    data?: unknown;
+    error?: string;
 }
 
 export function useUserOrg(organizationId: string) {
     const queryClient = useQueryClient();
+
     // 📌 GET Member (LIST)
     const {
         data: members = [] as Member[],
@@ -26,15 +48,22 @@ export function useUserOrg(organizationId: string) {
         queryKey: ["organizations", organizationId],
         queryFn: async () => {
             const res = await fetch(`/api/db/organization/${organizationId}`);
-            const data = await res.json();
-            const result = data.data.map((item: any) => ({
+
+            if (!res.ok) {
+                throw new Error("Failed to fetch members");
+            }
+
+            const data: GetMembersResponse = await res.json();
+
+            const result = data.data.map((item) => ({
                 id: item.users.id,
                 name: item.users.name,
                 email: item.users.email,
-                joinedAt: item.user_organizations.joinedAt,
+                joinedAt: new Date(item.user_organizations.joinedAt).getTime(),
                 role: item.user_organizations.role,
             }));
-            return result as Member[];
+
+            return result;
         },
     });
 
@@ -50,14 +79,20 @@ export function useUserOrg(organizationId: string) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),
             });
-            return res.json();
+
+            if (!res.ok) {
+                const error: AddMemberResponse = await res.json();
+                throw new Error(error.error || "Failed to add member");
+            }
+
+            return res.json() as Promise<AddMemberResponse>;
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["organizations", organizationId] });
+            toast.success("Member added successfully");
         },
-        onError: (res: any) => {
-            console.log(res)
-            toast.error(`${res.error}`);
+        onError: (error: Error) => {
+            toast.error(error.message);
         }
     });
 

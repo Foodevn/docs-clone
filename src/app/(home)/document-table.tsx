@@ -1,3 +1,5 @@
+"use client";
+
 import { LoaderIcon } from "lucide-react";
 
 import {
@@ -11,7 +13,7 @@ import {
 
 import { DocumentRow } from "./document-row";
 import { useDocuments } from "@/hooks/useDocuments";
-import { Button } from "@/components/ui/button";
+
 
 export const DocumentsTable = () => {
     // const { current } = useOrganizations();

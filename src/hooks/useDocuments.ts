@@ -6,12 +6,20 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { documents } from "@/db/schema";
 import { toast } from "sonner";
 import { useCurrentOrganization } from "@/contexts/organization-context";
-import { useEffect } from "react";
 
 type Document = typeof documents.$inferSelect;
 
-interface useDocumentsProps {
-    // organizationId?: string;
+// ✅ Define API response types
+interface CreateDocumentResponse {
+    success: boolean;
+    data?: Document;
+    error?: string;
+}
+
+interface UpdateDocumentData {
+    title?: string;
+    initialContent?: string;
+    [key: string]: unknown; // ✅ unknown thay vì any
 }
 
 export function useDocuments() {
@@ -44,7 +52,6 @@ export function useDocuments() {
             return data.allDocuments ?? [] as Document[];
         },
         enabled: !!organizationId, // chỉ fetch khi có orgId
-
     });
 
     // 📌 CREATE document
@@ -57,37 +64,45 @@ export function useDocuments() {
             initialContent: string;
         }) => {
             if (!organizationId) {
-                return
+                throw new Error("Organization ID is required");
             }
             const res = await fetch(`/api/db/document`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ title, initialContent, organizationId }),
             });
-            return res.json();
+
+            if (!res.ok) {
+                throw new Error("Failed to create document");
+            }
+
+            return res.json() as Promise<CreateDocumentResponse>;
         },
-        onSuccess: (newDoc: any) => {
+        onSuccess: (response: CreateDocumentResponse) => {
             queryClient.invalidateQueries({ queryKey: ["documents", organizationId] });
 
-            if (newDoc?.data?.id) {
-                router.push(`/documents/${newDoc.data.id}`);
+            if (response?.data?.id) {
+                router.push(`/documents/${response.data.id}`);
             }
-            toast.success("Document create");
+            toast.success("Document created");
         },
         onError: () => {
             toast.error("Something went wrong");
         }
     });
 
-    // const addDocument = (title: string, initialContent: string, organizationId: string) =>
-    //     addDocumentMutation.mutate({ title, initialContent, organizationId });
-
     // 📌 DELETE document
     const deleteDocumentMutation = useMutation({
         mutationFn: async (documentId: string) => {
-            await fetch(`/api/db/document/${documentId}`, {
+            const res = await fetch(`/api/db/document/${documentId}`, {
                 method: "DELETE",
             });
+
+            if (!res.ok) {
+                throw new Error("Failed to delete document");
+            }
+
+            return res.json();
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["documents", organizationId] });
@@ -96,9 +111,7 @@ export function useDocuments() {
         onError: () => {
             toast.error("Something went wrong");
         }
-
     });
-
 
     // 📌 UPDATE document
     const updateDocumentMutation = useMutation({
@@ -107,10 +120,7 @@ export function useDocuments() {
             updated,
         }: {
             documentId: string;
-            updated: {
-                title?: string;
-                [key: string]: any;
-            };
+            updated: UpdateDocumentData;
         }) => {
             const res = await fetch(`/api/db/document/${documentId}`, {
                 method: "PUT",
@@ -131,11 +141,9 @@ export function useDocuments() {
             toast.success("Document updated");
         },
         onError: () => {
-            toast.error("Something went wrong")
+            toast.error("Something went wrong");
         }
     });
-
-
 
     return {
         documents,

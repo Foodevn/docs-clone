@@ -1,9 +1,9 @@
+"use client";
+
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { SiGoogledocs } from "react-icons/si";
-import { Building2Icon, CircleUserIcon, MoreVertical } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
+import { Building2Icon, CircleUserIcon } from "lucide-react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { documents } from "@/db/schema";
 import { DocumentMenu } from "./document-menu";

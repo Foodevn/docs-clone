@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ChevronDown, Plus, Settings } from "lucide-react";
 import { useCurrentOrganization } from "@/contexts/organization-context";
 import { CreateDialog } from "@/components/create-dialog";

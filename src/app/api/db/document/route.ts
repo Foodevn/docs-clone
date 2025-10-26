@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { documents, organizations } from "@/db/schema";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { verifyToken } from "@/lib/jwt";
 
 import { cookies } from 'next/headers';

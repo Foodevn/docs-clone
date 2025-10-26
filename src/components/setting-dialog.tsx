@@ -19,7 +19,7 @@ import {
 import { MoreVertical, TrashIcon } from "lucide-react";
 import { useOrganizations } from "@/hooks/use-organization";
 import { useUserOrg } from "@/hooks/use-userOrg";
-import { useToast } from "@/hooks/use-toast"; // Import toast nếu có
+
 
 
 interface SettingDialogProps {
@@ -157,7 +157,7 @@ export const SettingDialog = ({
                     //     description: "Member invited successfully",
                     // });
                 },
-                onError: (error: any) => {
+                onError: (error: Error) => {
                     setEmailError(error.message || "Failed to invite member");
                     // toast({
                     //     title: "Error",

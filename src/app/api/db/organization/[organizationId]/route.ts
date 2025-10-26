@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { organizations, userOrganizations, users } from "@/db/schema";
-import { eq, and, desc } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { verifyToken } from "@/lib/jwt";
-
 import { cookies } from 'next/headers';
+
+// ✅ Type for partial organization update
+type OrganizationUpdate = Partial<Pick<typeof organizations.$inferInsert, 'name' | 'description'>> & {
+    updatedAt: Date;
+};
 
 export async function GET(
     req: NextRequest,
@@ -128,7 +132,7 @@ export async function PUT(
         }
 
         // Cập nhật Org
-        const updateData: any = {
+        const updateData: OrganizationUpdate = {
             updatedAt: new Date(),
         };
 

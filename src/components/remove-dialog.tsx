@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+
 
 import {
   AlertDialog,
@@ -13,7 +13,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { documents } from "@/db/schema";
-import { useRouter } from "next/navigation";
 import { useDocuments } from "@/hooks/useDocuments";
 
 type Document = typeof documents.$inferSelect;
@@ -24,7 +23,7 @@ interface RemoveDialogProps {
 }
 
 export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
-  const router = useRouter();
+
   const { deleteDocumentMutation } = useDocuments();
 
   return (

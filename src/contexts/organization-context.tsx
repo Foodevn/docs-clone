@@ -11,12 +11,29 @@ interface Organization {
     role: string;
 }
 
+// ✅ Define API response types
+interface OrganizationData {
+    organizations: {
+        id: string;
+        name: string;
+        description: string | null;
+        updatedAt: Date;
+    };
+    user_organizations: {
+        role: string;
+    };
+}
+
+interface GetOrganizationsResponse {
+    userOrganizationsDS: OrganizationData[];
+}
+
 interface OrganizationContextType {
     organizations: Organization[];
     current: Organization | undefined;
     setCurrent: (org: Organization | undefined) => void;
     loading: boolean;
-    error: any;
+    error: Error | null;
 }
 
 const OrganizationContext = createContext<OrganizationContextType | undefined>(undefined);
@@ -33,16 +50,22 @@ export function OrganizationProvider({ children }: { children: ReactNode }) {
         queryKey: ["organizations"],
         queryFn: async () => {
             const res = await fetch("/api/db/organization");
-            const data = await res.json();
-            const result = data.userOrganizationsDS.map((item: any) => ({
+
+            if (!res.ok) {
+                throw new Error("Failed to fetch organizations");
+            }
+
+            const data: GetOrganizationsResponse = await res.json();
+
+            const result = data.userOrganizationsDS.map((item) => ({
                 id: item.organizations.id,
                 name: item.organizations.name,
-                description: item.organizations.description,
-                updatedAt: item.organizations.updatedAt,
+                description: item.organizations.description || "",
+                updatedAt: new Date(item.organizations.updatedAt).getTime(),
                 role: item.user_organizations.role,
             }));
 
-            return result as Organization[];
+            return result;
         },
     });
 

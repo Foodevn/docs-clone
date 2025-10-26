@@ -35,10 +35,9 @@ export const TemplatesGallery = () => {
                 >
                   <button
                     disabled={addDocumentMutation.isPending}
-                    //TODO: Add proper initial content
                     onClick={() => addDocumentMutation.mutate({
                       title: template.label,
-                      initialContent: "",
+                      initialContent: template.initialContent,
                     })}
                     style={{
                       backgroundImage: `url(${template.imageUrl})`,

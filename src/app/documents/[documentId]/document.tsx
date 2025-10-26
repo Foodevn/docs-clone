@@ -10,6 +10,7 @@ interface DocumentProps {
     preloadedDocument: Document;
 }
 
+
 export const Document = ({ preloadedDocument }: DocumentProps) => {
     return (
         <Room>
@@ -19,7 +20,7 @@ export const Document = ({ preloadedDocument }: DocumentProps) => {
                     <Toolbar />
                 </div>
                 <div className="pt-[114px] print:pt-0">
-                    <Editor />
+                    <Editor initialContent={preloadedDocument.initialContent} />
                 </div>
             </div>
         </Room>

@@ -21,7 +21,6 @@ const SignInPage = () => {
         });
 
         if (res.ok) {
-            console.log("Đăng nhập thành công");
             router.push("/");
         } else {
             const data = await res.json();
@@ -89,80 +88,7 @@ const SignInPage = () => {
 }
 export default SignInPage;
 
-// function LoginPage() {
-//     const router = useRouter();
-//     const [email, setEmail] = useState("");
-//     const [password, setPassword] = useState("");
-//     const [loading, setLoading] = useState(false);
-//     const [error, setError] = useState("");
 
-//     async function handleLogin(e: React.FormEvent) {
-//         e.preventDefault();
-//         setError("");
-//         setLoading(true);
-
-//         const res = await fetch("/api/login", {
-//             method: "POST",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify({ email, password }),
-//         });
-
-//         setLoading(false);
-//         if (res.ok) {
-//             console.log("Đăng nhập thành công");
-//             router.push("/");
-//         } else {
-//             const data = await res.json();
-//             setError(data.error || "Đăng nhập thất bại");
-//         }
-//     }
-
-//     return (
-//         <div className="flex min-h-screen items-center justify-center bg-gray-100">
-//             <form
-//                 onSubmit={handleLogin}
-//                 className="bg-white p-8 rounded-2xl shadow-md w-80 space-y-4"
-//             >
-//                 <h1 className="text-2xl font-bold text-center text-blue-600">Đăng nhập</h1>
-
-//                 <input
-//                     type="email"
-//                     placeholder="Email"
-//                     className="w-full border rounded-lg p-2"
-//                     value={email}
-//                     onChange={(e) => setEmail(e.target.value)}
-//                     required
-//                 />
-
-//                 <input
-//                     type="password"
-//                     placeholder="Mật khẩu"
-//                     className="w-full border rounded-lg p-2"
-//                     value={password}
-//                     onChange={(e) => setPassword(e.target.value)}
-//                     required
-//                 />
-
-//                 {error && <p className="text-red-600 text-sm">{error}</p>}
-
-//                 <button
-//                     type="submit"
-//                     disabled={loading}
-//                     className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg"
-//                 >
-//                     {loading ? "Đang đăng nhập..." : "Đăng nhập"}
-//                 </button>
-
-//                 <p className="text-sm text-center">
-//                     Chưa có tài khoản?{" "}
-//                     <a href="/sign-up" className="text-blue-600 font-semibold hover:underline">
-//                         Đăng ký
-//                     </a>
-//                 </p>
-//             </form>
-//         </div>
-//     );
-// }
 
 
 

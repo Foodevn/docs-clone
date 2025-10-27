@@ -16,7 +16,6 @@ export async function POST(req: NextRequest) {
         const cookieStore = await cookies();
         const token = cookieStore.get("access_token")?.value;
 
-        console.log("🔐 Liveblocks auth - Token exists:", !!token);
 
         if (!token) {
             console.error("❌ No token provided");
@@ -27,7 +26,6 @@ export async function POST(req: NextRequest) {
         }
 
         const payload = await verifyToken(token);
-        console.log("🔍 Token payload:", payload);
 
         // Support both 'id' and 'userId' for backward compatibility
         const userId = (payload?.userId || payload?.id) as string;
@@ -40,7 +38,6 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        console.log("✅ User ID from token:", userId);
 
         // 2️⃣ Get user from database
         const [user] = await db

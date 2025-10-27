@@ -29,7 +29,6 @@ export function useDocuments() {
     const { current } = useCurrentOrganization();
 
     const organizationId = current?.id;
-    console.log({ organizationId });
 
     // 📌 Build URL GET
     const buildUrl = () => {

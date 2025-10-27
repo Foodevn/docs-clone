@@ -87,7 +87,6 @@ export default function OrganizationSwitcher({
             </div>
         );
     }
-    // console.log({ current });
     return (
         <div className={"relative inline-block text-left " + (className ?? "")}>
             {/* Toggle button */}

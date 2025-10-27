@@ -38,9 +38,6 @@ const SignUpPage = () => {
             setError(data.error || "Đăng ký thất bại");
         }
 
-
-
-        console.log({ name, email, password });
     };
     return (
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">

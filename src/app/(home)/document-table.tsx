@@ -16,11 +16,9 @@ import { useDocuments } from "@/hooks/useDocuments";
 
 
 export const DocumentsTable = () => {
-    // const { current } = useOrganizations();
-    // { organizationId: current?.id }
+
     const { documents, loading } = useDocuments();
 
-    console.log({ documents }); // Debug
     return (
         <div className="max-w-screen-xl mx-auto px-16 py-6 flex flex-col gap-5">
             {loading === true ? (

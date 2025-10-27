@@ -97,10 +97,10 @@ export const UserButton = () => {
                     </button>
 
                     <button
-                        onClick={() => router.push("/settings")}
+                        onClick={() => router.push("/reports")}
                         className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                        Settings
+                        Báo cáo/Thống kê
                     </button>
 
                     <div className="border-t border-gray-200 my-1"></div>

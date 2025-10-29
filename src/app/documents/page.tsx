@@ -22,3 +22,5 @@ const DocumentsPage = async () => {
     );
 }
 export default DocumentsPage
+
+export const dynamic = "force-dynamic";

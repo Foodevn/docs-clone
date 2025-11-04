@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import {Inter} from "next/font/google";
+import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import "./globals.css";
+
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +24,10 @@ export default function RootLayout({
         className={inter.className}
       >
         <NuqsAdapter>
-          {children}
+          <ProtectedRoute>
+            {children}
+          </ProtectedRoute>
+
         </NuqsAdapter>
       </body>
     </html>

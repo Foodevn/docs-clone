@@ -5,6 +5,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
 
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import QueryProvider from "@/providers/query-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,9 +26,10 @@ export default function RootLayout({
       >
         <NuqsAdapter>
           <ProtectedRoute>
-            {children}
+            <QueryProvider>
+              {children}
+            </QueryProvider>
           </ProtectedRoute>
-
         </NuqsAdapter>
       </body>
     </html>

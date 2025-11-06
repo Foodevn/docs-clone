@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SearchInput } from "./search-input";
+import { UserButton } from "@/components/auth/user-component";
 
 export const Navbar = () => {
   return (
@@ -12,7 +13,7 @@ export const Navbar = () => {
         </Link>
       </div>
       <SearchInput />
-      <div />
+      <UserButton />
     </nav>
   );
 };

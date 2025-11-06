@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/axios";
-
+import { Document } from "@/types/document";
 // =============================
 // 1️⃣ Lấy tất cả tài liệu
 // =============================
@@ -9,7 +9,7 @@ export const useDocuments = () => {
         queryKey: ["documents"],
         queryFn: async () => {
             const res = await api.get("/documents");
-            return res.data.dsDocuments;
+            return res.data.dsDocuments as Document[];
         },
     });
 };

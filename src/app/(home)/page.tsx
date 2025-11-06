@@ -12,6 +12,7 @@ import {
   useUpdateDocument,
   useDeleteDocument,
 } from "@/hooks/useDocuments";
+import { DocumentsTable } from "./documents-table";
 
 const Home = () => {
   // useEffect(() => {
@@ -27,8 +28,7 @@ const Home = () => {
   //   fetchDocuments();
   // });
 
-  const { data: documents, isLoading } = useDocuments();
-  console.log(isLoading);
+
   return (
     <div className="min-h-screen flex flex-col"
     >
@@ -37,14 +37,8 @@ const Home = () => {
       </div>
       <div className="mt-16">
         <TemplatesGallery />
+        <DocumentsTable />
 
-        <ul>
-          {documents?.map((doc: any) => (
-            <li key={doc.id}>
-              {doc.title}
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   );

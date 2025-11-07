@@ -3,10 +3,11 @@
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { SiGoogledocs } from "react-icons/si";
-import { BookCheck, Building2Icon, CircleUserIcon, FileKey, MoreVertical } from "lucide-react";
+import { BookCheck, FileKey, MoreVertical } from "lucide-react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Document } from "@/types/document";
 import { Button } from "@/components/ui/button";
+import { DocumentMenu } from "./document-menu";
 
 interface DocumentRowProps {
     document: Document;
@@ -15,9 +16,6 @@ interface DocumentRowProps {
 export const DocumentRow = ({ document }: DocumentRowProps) => {
     const router = useRouter();
 
-    const onNewTabClick = (id: string) => {
-        window.open(`/documents/${id}`, "_blank");
-    };
     return (
         <TableRow>
             <TableCell
@@ -44,15 +42,9 @@ export const DocumentRow = ({ document }: DocumentRowProps) => {
                 {format(new Date(document.createdAt), "MMM dd, yyyy")}
             </TableCell>
             <TableCell className="flex justify-end">
-                {/* <DocumentMenu
-                    documentId={document.id}
-                    title={document.title}
-                    onNewTab={onNewTabClick}
-                /> */}
-
-                <Button variant="ghost" size="icon" className="rounded-full">
-                    <MoreVertical className="size-4" />
-                </Button>
+                <DocumentMenu
+                    document={document}
+                />
             </TableCell>
         </TableRow>
     );

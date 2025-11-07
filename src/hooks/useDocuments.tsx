@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import { Document } from "@/types/document";
+import { toast } from "sonner";
 // =============================
 // 1️⃣ Lấy tất cả tài liệu
 // =============================
@@ -26,6 +27,7 @@ export const useDocument = (id?: string) => {
             return res.data;
         },
         enabled: !!id, // chỉ gọi khi có id
+
     });
 };
 
@@ -42,7 +44,11 @@ export const useCreateDocument = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["documents"] });
+            toast.success("đã tạo tài liệu mới");
         },
+        onError: () => {
+            toast.error("lỗi khi tạo tài liệu");
+        }
     });
 };
 
@@ -50,15 +56,16 @@ export const useCreateDocument = () => {
 // 4️⃣ Cập nhật tài liệu
 // =============================
 export const useUpdateDocument = () => {
-    const queryClient = useQueryClient();
+    const queryClient = useQueryClient(
+    );
 
     return useMutation({
         mutationFn: async ({
             id,
             data,
         }: {
-            id: string;
-            data: Partial<{ title: string; content: string }>;
+            id: number;
+            data: { title: string };
         }) => {
             const res = await api.put(`/documents/${id}`, data);
             return res.data;
@@ -66,7 +73,12 @@ export const useUpdateDocument = () => {
         onSuccess: (_, { id }) => {
             queryClient.invalidateQueries({ queryKey: ["documents"] });
             queryClient.invalidateQueries({ queryKey: ["document", id] });
+            toast.success("tài liệu đã được cập nhật");
         },
+        onError: () => {
+            toast.error("cập nhật tài liệu thất bại");
+        }
+
     });
 };
 
@@ -75,9 +87,8 @@ export const useUpdateDocument = () => {
 // =============================
 export const useDeleteDocument = () => {
     const queryClient = useQueryClient();
-
     return useMutation({
-        mutationFn: async (id: string) => {
+        mutationFn: async (id: number) => {
             const res = await api.delete(`/documents/${id}`);
             return res.data;
         },

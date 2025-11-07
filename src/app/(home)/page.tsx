@@ -38,7 +38,6 @@ const Home = () => {
       <div className="mt-16">
         <TemplatesGallery />
         <DocumentsTable />
-
       </div>
     </div>
   );

@@ -10,13 +10,27 @@ import {
     TableHeader,
     TableRow
 } from "@/components/ui/table";
+import { useMemo } from "react";
 
 import { DocumentRow } from "./document-row";
 import { useDocuments } from "@/hooks/useDocuments";
+import { useSearchParam } from "@/hooks/use-search-param";
 
 
 export const DocumentsTable = () => {
     const { data: documents, isLoading } = useDocuments();
+    const [search] = useSearchParam();
+
+    // Memoize để tránh filter lại mỗi lần render
+    const filteredDocuments = useMemo(() => {
+        if (!documents) return [];
+        if (!search) return documents;
+
+        return documents.filter((doc) =>
+            doc.title.toLowerCase().includes(search.toLowerCase())
+        );
+    }, [documents, search]);
+
     return (
         <div className="max-w-screen-xl mx-auto px-16 py-6 flex flex-col gap-5">
             {isLoading === true ? (
@@ -33,7 +47,7 @@ export const DocumentsTable = () => {
                             <TableHead className="hidden md:table-cell">Create at</TableHead>
                         </TableRow>
                     </TableHeader>
-                    {!documents || documents.length === 0 ? (
+                    {!filteredDocuments || filteredDocuments.length === 0 ? (
                         <TableBody>
                             <TableRow className="hover:bg-transparent">
                                 <TableCell colSpan={4} className="h-24 text-center text-muted-foreground">
@@ -43,7 +57,7 @@ export const DocumentsTable = () => {
                         </TableBody>
                     ) : (
                         <TableBody>
-                            {documents.map((document) => (
+                            {filteredDocuments.map((document) => (
                                 <DocumentRow key={document.id} document={document} />
                             ))}
                         </TableBody>

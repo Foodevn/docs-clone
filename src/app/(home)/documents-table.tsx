@@ -45,7 +45,7 @@ export const DocumentsTable = () => {
                         <TableRow className="hover:bg-transparent border-none">
                             <TableHead>Name</TableHead>
                             <TableHead>&nbsp;</TableHead>
-                            <TableHead className="hidden md:table-cell">Shared</TableHead>
+                            <TableHead className="hidden md:table-cell">Permission</TableHead>
                             <TableHead className="hidden md:table-cell">Create at</TableHead>
                         </TableRow>
                     </TableHeader>

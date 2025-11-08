@@ -17,7 +17,7 @@ interface PermissionPops {
 interface PermissionData {
     role: string;
     canView?: boolean;
-    canEdit?: boolean;
+    canEdit: boolean;
     canDelete?: boolean;
     canShare?: boolean;
 }
@@ -58,7 +58,7 @@ const Permission = ({ documentId, children }: PermissionPops) => {
                     canEdit: false,
                 }
             default:
-                return { role: 'nodoor' };
+                return { role: 'nodoor', canEdit: false };
         }
 
     }

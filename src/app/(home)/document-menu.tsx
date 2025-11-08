@@ -29,15 +29,18 @@ export const DocumentMenu = ({ document }: DocumentMenuProps) => {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                <RenameDialog documentId={document.id} initialTitle={document.title}>
-                    <DropdownMenuItem
-                        onSelect={(e) => e.preventDefault()}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <FilePenIcon className="size-4 mr-2" />
-                        Rename
-                    </DropdownMenuItem>
-                </RenameDialog>
+                {document.permission == "admin" && (
+                    <RenameDialog documentId={document.id} initialTitle={document.title}>
+                        <DropdownMenuItem
+                            onSelect={(e) => e.preventDefault()}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <FilePenIcon className="size-4 mr-2" />
+                            Rename
+                        </DropdownMenuItem>
+                    </RenameDialog>
+                )}
+
                 <RemoveDialog
                     documentId={document.id}
                     permission={document.permission}

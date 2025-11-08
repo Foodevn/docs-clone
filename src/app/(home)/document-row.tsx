@@ -3,7 +3,7 @@
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { SiGoogledocs } from "react-icons/si";
-import { BookCheck, FileKey, MoreVertical } from "lucide-react";
+import { BookCheck, FileKey, MoreVertical, Shield, User, UserLock } from "lucide-react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Document } from "@/types/document";
 import { Button } from "@/components/ui/button";
@@ -30,11 +30,11 @@ export const DocumentRow = ({ document }: DocumentRowProps) => {
                 {document.title}
             </TableCell>
             <TableCell className="text-muted-foreground hidden md:flex items-center gap-2">
-                {document.isPrivate
-                    ? <FileKey className="size-4" />
-                    : <BookCheck className="size-4" />
-                }
 
+                {document.permission == "admin"
+                    ? <UserLock className="size-4" />
+                    : <User className="size-4" />
+                }
                 {document.permission}
             </TableCell>
             <TableCell className="text-muted-foreground hidden md:table-cell">

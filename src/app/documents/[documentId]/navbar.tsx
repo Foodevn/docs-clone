@@ -42,13 +42,15 @@ import { DocumentInput } from "./document-input";
 import { useEditorStore } from "@/stores/use-editor-store";
 import { UserButton } from "@/components/auth/user-component";
 import ShareButton from "./share-button";
-import { usePermission } from "@/components/auth/permission";
+
+
+
 
 export const Navbar = () => {
   const { editor } = useEditorStore();
-  const permission = usePermission();
 
-  console.log("Permission data:", permission);
+  // const permission = usePermission();
+  // console.log("Permission data:", permission);
 
   const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
     editor

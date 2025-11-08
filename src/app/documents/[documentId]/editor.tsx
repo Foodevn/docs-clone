@@ -23,10 +23,15 @@ import { FontSizeExtension } from '@/extensions/font-size'
 import { LineHeightExtension } from '@/extensions/line-height';
 import { Line } from 'recharts';
 import { Ruler } from './ruler';
+import { usePermission } from '@/components/auth/permission';
 
 export const Editor = () => {
   const { setEditor } = useEditorStore();
+  const permission = usePermission();
+
   const editor = useEditor({
+    editable: permission.canEdit,//quyền trỉnh sửa trong editor
+
     onCreate({ editor }) {
       setEditor(editor);
     },

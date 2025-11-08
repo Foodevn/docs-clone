@@ -1,16 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Lock, X, Copy, Settings } from "lucide-react";
+import { ChevronDown, Eye, Lock, PencilLine, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { usePermission } from "@/components/auth/permission";
+
 
 export default function ShareButton() {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [emailInvite, setEmailInvite] = useState("");
     const [emailError, setEmailError] = useState("");
-
+    const permission = usePermission();
+    console.log("Permission data:", permission);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -90,7 +93,29 @@ export default function ShareButton() {
         });
     }
 
+    // dành cho viewer
+    if (permission.role != "admin" && permission.role !== "member") {
+        return (
+            <button
+                className="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-slate-800 font-medium px-4 py-2 rounded-full transition-all duration-150 border border-transparent ">
+                <Eye size={16} className="text-slate-700" />
+                <span>chỉ xem</span>
+            </button>
+        )
+    }
 
+    // dành cho member
+    if (permission.role != "admin") {
+        return (
+            <button
+                className="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-slate-800 font-medium px-4 py-2 rounded-full transition-all duration-150 border border-transparent ">
+                <PencilLine size={16} className="text-slate-700" />
+                <span>chỉnh sửa</span>
+            </button>
+        )
+    }
+
+    //dành cho admin
     return (
         <div className="relative inline-block" ref={dropdownRef}>
             <button
@@ -215,66 +240,3 @@ export default function ShareButton() {
         </div >
     );
 }
-//<div
-//     className=" absolute right-0 mt-3 w-96 bg-white  shadow-xl rounded-xl border border-gray-200 p-4 z-50  "  >
-//     {/* Header */}
-//     <div className="flex justify-between items-center mb-3">
-//         <h2 className="text-base font-medium">Chia sẻ “Nháp”</h2>
-//         <button
-//             onClick={() => setOpen(false)}
-//             className="text-gray-500 hover:text-gray-700"
-//         >
-//             <X size={18} />
-//         </button>
-//     </div>
-
-//     {/* Ô thêm người */}
-//     <input
-//         type="text"
-//         placeholder="Thêm người, nhóm, không gian và sự kiện trên lịch"
-//         className=" w-full border border-gray-300 rounded-lg  px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4  "
-//     />
-
-//     {/* Người có quyền truy cập */}
-//     <div className="mb-4">
-//         <p className="text-sm text-gray-500 mb-2">Những người có quyền truy cập</p>
-//         <div className="flex items-center gap-3">
-//             <img
-//                 src="https://www.gravatar.com/avatar/?d=mp"
-//                 alt="avatar"
-//                 className="w-8 h-8 rounded-full"
-//             />
-//             <div className="flex flex-col">
-//                 <span className="text-sm font-medium text-gray-800">Hoàng Phúc (you)</span>
-//                 <span className="text-xs text-gray-500">hoangphuc0918065630@gmail.com</span>
-//             </div>
-//             <span className="ml-auto text-xs text-gray-500">Chủ sở hữu</span>
-//         </div>
-//     </div>
-
-//     {/* Quyền truy cập chung */}
-//     <div className="border-t pt-3">
-//         <p className="text-sm text-gray-500 mb-2">Quyền truy cập chung</p>
-//         <div className="flex items-center justify-between">
-//             <div>
-//                 <p className="text-sm font-medium text-gray-800">Hạn chế</p>
-//                 <p className="text-xs text-gray-500">
-//                     Chỉ những người có quyền truy cập mới có thể mở bằng đường liên kết này
-//                 </p>
-//             </div>
-//             <ChevronDown size={16} className="text-gray-500" />
-//         </div>
-
-//         {/* Nút sao chép link */}
-//         <button
-//             className="  mt-4 flex items-center justify-center gap-2  w-full bg-blue-100 hover:bg-blue-200   text-blue-700 text-sm font-medium  rounded-full py-2 transition-all " >
-//             <Copy size={16} />
-//             Sao chép đường liên kết
-//         </button>
-//     </div>
-
-//     {/* Cài đặt */}
-//     <div className="absolute top-4 right-10 text-gray-500 hover:text-gray-700 cursor-pointer">
-//         <Settings size={16} />
-//     </div>
-// </div>

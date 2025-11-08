@@ -5,6 +5,8 @@ import { ChevronDown, Eye, Lock, PencilLine, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { usePermission } from "@/components/auth/permission";
+import DropMenuAction from "./drop-menu-user";
+
 
 
 export default function ShareButton() {
@@ -53,7 +55,7 @@ export default function ShareButton() {
             id: "u002",
             name: "Ngọc Anh",
             email: "ngocanh@example.com",
-            role: "Editor",
+            role: "Member",
             avatarUrl: "",
             joinedAt: "2024-11-03T15:30:00Z",
         },
@@ -76,14 +78,7 @@ export default function ShareButton() {
         setEmailInvite("");
     };
 
-    const DropMenu = ({ userId }: { userId: string }) => (
-        <button
-            onClick={() => alert(`Xóa user có id = ${userId}`)}
-            className="text-red-500 text-sm hover:underline"
-        >
-            Remove
-        </button>
-    );
+
 
     function formatDate(date: string) {
         return new Date(date).toLocaleDateString("vi-VN", {
@@ -223,9 +218,7 @@ export default function ShareButton() {
                                         {/* Actions */}
                                         {(role.trim().toLowerCase() === "admin" && m.role.trim().toLowerCase() !== "admin") && (
                                             <td className="py-3 px-4 text-right">
-                                                <DropMenu
-                                                    userId={m.id as string}
-                                                />
+                                                <DropMenuAction />
                                             </td>
                                         )}
 

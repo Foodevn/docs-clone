@@ -18,16 +18,20 @@ import { Document } from "@/types/document";
 
 interface RemoveDialogProps {
     documentId: Document["id"];
+    permission: Document["permission"];
     children: React.ReactNode;
 }
 
-export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
+export const RemoveDialog = ({ documentId, permission, children }: RemoveDialogProps) => {
 
     const { mutate: deleteDocument, isPending } = useDeleteDocument();
 
     const handleDelete = (e: React.MouseEvent) => {
         e.stopPropagation();
-        deleteDocument(documentId);
+        deleteDocument({
+            id: documentId,
+            permission
+        });
     }
 
     return (
@@ -39,8 +43,7 @@ export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your
-                        document.
+                        This action cannot be undone. This will permanently delete your document.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

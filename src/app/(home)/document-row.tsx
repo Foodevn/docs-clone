@@ -15,7 +15,6 @@ interface DocumentRowProps {
 
 export const DocumentRow = ({ document }: DocumentRowProps) => {
     const router = useRouter();
-
     return (
         <TableRow>
             <TableCell
@@ -36,7 +35,7 @@ export const DocumentRow = ({ document }: DocumentRowProps) => {
                     : <BookCheck className="size-4" />
                 }
 
-                {document.isPrivate ? "Private" : "Public"}
+                {document.permission}
             </TableCell>
             <TableCell className="text-muted-foreground hidden md:table-cell">
                 {format(new Date(document.createdAt), "MMM dd, yyyy")}

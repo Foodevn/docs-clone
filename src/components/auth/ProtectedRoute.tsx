@@ -23,7 +23,6 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     if (accessToken && !user) {
       await fetchMe();
     }
-
     setStarting(false);
   };
 

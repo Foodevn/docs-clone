@@ -5,6 +5,7 @@ import Link from "next/link";
 import { BsFilePdf } from "react-icons/bs";
 import {
   BoldIcon,
+  ChevronDown,
   FileIcon,
   FileJsonIcon,
   FilePenIcon,
@@ -12,6 +13,7 @@ import {
   FileTextIcon,
   GlobeIcon,
   ItalicIcon,
+  Lock,
   PrinterIcon,
   Redo2Icon,
   RemoveFormattingIcon,
@@ -38,9 +40,15 @@ import {
 import { DocumentInput } from "./document-input";
 
 import { useEditorStore } from "@/stores/use-editor-store";
+import { UserButton } from "@/components/auth/user-component";
+import ShareButton from "./share-button";
+import { usePermission } from "@/components/auth/permission";
 
 export const Navbar = () => {
   const { editor } = useEditorStore();
+  const permission = usePermission();
+
+  console.log("Permission data:", permission);
 
   const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
     editor
@@ -224,6 +232,11 @@ export const Navbar = () => {
             </Menubar>
           </div>
         </div>
+
+      </div>
+      <div className="flex gap-3 items-center pl-6">
+        <ShareButton />
+        <UserButton />
       </div>
     </nav>
   );

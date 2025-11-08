@@ -38,7 +38,10 @@ export const DocumentMenu = ({ document }: DocumentMenuProps) => {
                         Rename
                     </DropdownMenuItem>
                 </RenameDialog>
-                <RemoveDialog documentId={document.id}>
+                <RemoveDialog
+                    documentId={document.id}
+                    permission={document.permission}
+                >
                     <DropdownMenuItem
                         onSelect={(e) => e.preventDefault()}
                         onClick={(e) => e.stopPropagation()}

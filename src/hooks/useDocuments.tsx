@@ -88,12 +88,18 @@ export const useUpdateDocument = () => {
 export const useDeleteDocument = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (id: number) => {
-            const res = await api.delete(`/documents/${id}`);
+        mutationFn: async ({ id, permission }: { id: number; permission: string }) => {
+            const res = await api.delete(`/documents/${id}`, {
+                data: { permission }   // ⭐ Gửi qua config.data
+            });
             return res.data;
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["documents"] });
+            toast.success("tài liệu đã được xóa");
         },
+        onError: () => {
+            toast.error("xóa tài liệu thất bại");
+        }
     });
 };

@@ -21,19 +21,22 @@ const DropMenuAction = () => {
                     onClick={(e) => e.stopPropagation()}
                 >
                     <FilePenIcon className="size-4 mr-2" />
-                    Rename
+                    member
                 </DropdownMenuItem>
+
                 <DropdownMenuItem
                     onSelect={(e) => e.preventDefault()}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <TrashIcon className="size-4 mr-2" />
-                    Remove
+                    <ExternalLinkIcon className="size-4 mr-2" />
+                    viewer
                 </DropdownMenuItem>
 
-                <DropdownMenuItem>
-                    <ExternalLinkIcon className="size-4 mr-2" />
-                    Open in a new tab
+                <DropdownMenuItem
+                    className="text-red-600 hover:bg-red-50 hover:text-red-700 focus:bg-red-50 focus:text-red-700 cursor-pointer"
+                >
+                    <TrashIcon className="size-4 mr-2" />
+                    remove
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

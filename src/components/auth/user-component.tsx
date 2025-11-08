@@ -9,24 +9,10 @@ import { LogOut, Settings } from "lucide-react";
 
 export const UserButton = () => {
     const [isOpen, setIsOpen] = useState(false);
-    // const [user, setUser] = useState<User | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const { signOut } = useAuthStore();
     const router = useRouter();
     const user = useAuthStore((s) => s.user);
-
-    // const user = {
-    //     _id: "1",
-    //     username: "Hoàng Phúc",
-    //     email: "hoangphuc0918065630@gmail",
-    //     displayName: "Hoàng Phúc",
-    //     avatarUrl: "",
-    //     bio: "user",
-    //     phone: "user",
-    //     createdAt: "user",
-    //     updatedAt: "user",
-    // }
-
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {

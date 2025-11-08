@@ -27,10 +27,10 @@ import { usePermission } from '@/components/auth/permission';
 
 export const Editor = () => {
   const { setEditor } = useEditorStore();
-  const permission = usePermission();
+  const permissions = usePermission();
 
   const editor = useEditor({
-    editable: permission.canEdit,//quyền trỉnh sửa trong editor
+    editable: permissions.permission.canEdit,//quyền trỉnh sửa trong editor
 
     onCreate({ editor }) {
       setEditor(editor);

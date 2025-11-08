@@ -15,11 +15,12 @@ interface PermissionPops {
 }
 
 interface PermissionData {
-    role: string;
-    canView?: boolean;
-    canEdit: boolean;
-    canDelete?: boolean;
-    canShare?: boolean;
+    documentId: string;
+    permission: {
+        role: string;
+        canEdit: boolean;
+    };
+
 }
 
 const PermissionContext = createContext<PermissionData | null>(null);
@@ -34,11 +35,11 @@ export const usePermission = () => {
 
 const Permission = ({ documentId, children }: PermissionPops) => {
     const router = useRouter(); // ⭐ useRouter thay vì redirect
-    const [isChecking, setIsChecking] = useState(true); // ⭐ Loading state
-    const [hasAccess, setHasAccess] = useState(false); // ⭐ Access state
-    const [permissionData, setPermissionData] = useState<PermissionData | null>(null);
+    const [isChecking, setIsChecking] = useState(true);
+    const [hasAccess, setHasAccess] = useState(false);
+    const [permissionData, setPermissionData] = useState<PermissionData["permission"]>({ role: '', canEdit: false });
 
-    const attachPermissions = (permission: string): PermissionData => {
+    const attachPermissions = (permission: string): PermissionData["permission"] => {
         switch (permission) {
             case 'admin':
                 return {
@@ -92,8 +93,14 @@ const Permission = ({ documentId, children }: PermissionPops) => {
             Bạn không có quyền truy cập
         </div>;
     }
+    // ⭐ Truyền cả documentId vào Context
+    const contextValue = {
+        documentId,  // ⭐ Thêm vào đây
+        permission: permissionData,
+    };
+
     return (
-        <PermissionContext.Provider value={permissionData}>
+        <PermissionContext.Provider value={contextValue}>
             {children}
         </PermissionContext.Provider>
     );

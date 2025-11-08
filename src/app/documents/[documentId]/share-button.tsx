@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { usePermission } from "@/components/auth/permission";
 import DropMenuAction from "./drop-menu-user";
+import { useDocumentPermissions } from "@/hooks/useDocumentPermissions";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 
 
@@ -14,8 +16,12 @@ export default function ShareButton() {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [emailInvite, setEmailInvite] = useState("");
     const [emailError, setEmailError] = useState("");
-    const permission = usePermission();
-    console.log("Permission data:", permission);
+    const permission = usePermission().permission;
+    const documentId = usePermission().documentId;
+    const currentUser = useAuthStore((s) => s.user);
+
+    const { data: members } = useDocumentPermissions(documentId);
+    console.log(currentUser);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -27,48 +33,6 @@ export default function ShareButton() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-
-    // Giả lập mutation thêm thành viên
-    const addMemberMutation = {
-        isPending: false,
-    };
-
-    const currentUser = {
-        id: "u001",
-        name: "Phúc Hoàng",
-        email: "phuc@example.com",
-    };
-
-    const role = "Admin"; // vai trò hiện tại của người dùng đang xem
-
-    // Dữ liệu mẫu danh sách thành viên
-    const [members] = useState([
-        {
-            id: "u001",
-            name: "Phúc Hoàng",
-            email: "phuc@example.com",
-            role: "Admin",
-            avatarUrl: "",
-            joinedAt: "2024-11-01T10:00:00Z",
-        },
-        {
-            id: "u002",
-            name: "Ngọc Anh",
-            email: "ngocanh@example.com",
-            role: "Member",
-            avatarUrl: "",
-            joinedAt: "2024-11-03T15:30:00Z",
-        },
-        {
-            id: "u003",
-            name: "Minh Tâm",
-            email: "minhtam@example.com",
-            role: "Viewer",
-            avatarUrl: "",
-            joinedAt: "2024-11-05T09:20:00Z",
-        },
-    ]);
-
     const handleAddMember = () => {
         if (!emailInvite.includes("@")) {
             setEmailError("Email không hợp lệ");
@@ -77,8 +41,6 @@ export default function ShareButton() {
         alert(`Đã gửi lời mời tới ${emailInvite}`);
         setEmailInvite("");
     };
-
-
 
     function formatDate(date: string) {
         return new Date(date).toLocaleDateString("vi-VN", {
@@ -91,22 +53,22 @@ export default function ShareButton() {
     // dành cho viewer
     if (permission.role != "admin" && permission.role !== "member") {
         return (
-            <button
-                className="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-slate-800 font-medium px-4 py-2 rounded-full transition-all duration-150 border border-transparent ">
+            <div
+                className="flex items-center gap-2 bg-blue-100  text-slate-800 font-medium px-4 py-2 rounded-full transition-all duration-150 border border-transparent ">
                 <Eye size={16} className="text-slate-700" />
                 <span>chỉ xem</span>
-            </button>
+            </div>
         )
     }
 
     // dành cho member
     if (permission.role != "admin") {
         return (
-            <button
+            <div
                 className="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-slate-800 font-medium px-4 py-2 rounded-full transition-all duration-150 border border-transparent ">
                 <PencilLine size={16} className="text-slate-700" />
                 <span>chỉnh sửa</span>
-            </button>
+            </div>
         )
     }
 
@@ -153,9 +115,9 @@ export default function ShareButton() {
                             <Button
                                 type="button"
                                 onClick={handleAddMember}
-                                disabled={addMemberMutation.isPending || !emailInvite.trim()}
+                            // disabled={addMemberMutation.isPending || !emailInvite.trim()}
                             >
-                                {addMemberMutation.isPending ? "Inviting..." : "Invite"}
+                                {/* {addMemberMutation.isPending ? "Inviting..." : "Invite"} */}
                             </Button>
                         </div>
                     </div>
@@ -168,32 +130,33 @@ export default function ShareButton() {
                                     <th className="py-3 px-4">User</th>
                                     <th className="py-3 px-4">Joined</th>
                                     <th className="py-3 px-4">Role</th>
-                                    {role.trim().toLowerCase() === "admin" && <th className="py-3 px-4 text-right">Actions</th>}
+                                    {permission.role.trim().toLowerCase() === "admin" && <th className="py-3 px-4 text-right">Actions</th>}
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {members.map((m) => (
+                                {members && members.map((m) => (
                                     <tr
-                                        key={m.id}
+                                        key={m.userId}
                                         className="border-b hover:bg-gray-50 transition"
                                     >
                                         {/* User */}
                                         <td className="py-3 px-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="h-9 w-9 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold overflow-hidden">
-                                                    {m.avatarUrl ? (
-                                                        <img src={m.avatarUrl} className="h-full w-full object-cover" />
+                                                    {m.avartarUrl ? (
+                                                        <img src={m.avartarUrl} className="h-full w-full object-cover" />
                                                     ) : (
-                                                        m.name.charAt(0).toUpperCase()
+                                                        m.displayName.charAt(0).toUpperCase()
                                                     )}
                                                 </div>
 
                                                 <div>
-                                                    <div className="font-medium">{m.name}</div>
+                                                    <div className="font-medium">{m.displayName}</div>
                                                     <div className="text-gray-500 text-xs">
                                                         {m.email}
-                                                        {m.id == currentUser.id && (
+
+                                                        {m.userId == currentUser?.id && (
                                                             <span className="ml-2 text-[10px] px-2 py-[2px] bg-gray-200 rounded-full">
                                                                 You
                                                             </span>
@@ -205,18 +168,18 @@ export default function ShareButton() {
 
                                         {/* Joined */}
                                         <td className="py-3 px-4 text-gray-600">
-                                            {formatDate(m.joinedAt)}
+                                            {formatDate(m.createAt)}
                                         </td>
 
                                         {/* Role */}
                                         <td className="py-3 px-4">
                                             <div className="text-gray-800 font-medium">
-                                                {m.role}
+                                                {m.permission}
                                             </div>
                                         </td>
 
                                         {/* Actions */}
-                                        {(role.trim().toLowerCase() === "admin" && m.role.trim().toLowerCase() !== "admin") && (
+                                        {(permission.role.trim().toLowerCase() === "admin" && m.permission.trim().toLowerCase() !== "admin") && (
                                             <td className="py-3 px-4 text-right">
                                                 <DropMenuAction />
                                             </td>

@@ -8,12 +8,14 @@ import { usePermission } from "@/components/auth/permission";
 import DropMenuAction from "./drop-menu-user";
 import { useAddPermission, useDocumentPermissions } from "@/hooks/useDocumentPermissions";
 import { useAuthStore } from "@/stores/useAuthStore";
-
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 
 export default function ShareButton() {
-    const [open, setOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
     const [emailInvite, setEmailInvite] = useState("");
     const [emailError, setEmailError] = useState("");
     const permission = usePermission().permission;
@@ -22,17 +24,6 @@ export default function ShareButton() {
     const { mutate: addPermission, isPending } = useAddPermission();
 
     const { data: members } = useDocumentPermissions(documentId);
-    console.log(currentUser);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setOpen(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
 
     const handleAddMember = () => {
         if (!emailInvite.includes("@")) {
@@ -79,125 +70,247 @@ export default function ShareButton() {
 
     //dành cho admin
     return (
-        <div className="relative inline-block" ref={dropdownRef}>
-            <button
-                onClick={() => setOpen(!open)}
-                className="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-slate-800 font-medium px-4 py-2 rounded-full transition-all duration-150 border border-transparent ">
-                <Lock size={16} className="text-slate-700" />
-                <span>Chia Sẻ</span>
-                <ChevronDown size={16} className="text-slate-700" />
-            </button>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-slate-800 font-medium px-4 py-2 rounded-full transition-all duration-150 border border-transparent">
+                    <Lock size={16} className="text-slate-700" />
+                    <span>Chia Sẻ</span>
+                    <ChevronDown size={16} className="text-slate-700" />
+                </button>
+            </DropdownMenuTrigger>
 
-            {/*Popup chia sẻ */}
-            {open && (
-                <div className=" absolute right-0 mt-3 bg-white  shadow-xl rounded-xl border border-gray-200 p-4 z-50  "  >
-                    <div className="flex justify-between items-center mb-3">
-                        <p></p>
-                        <button
-                            onClick={() => setOpen(false)}
-                            className="text-gray-500 hover:text-gray-700"
-                        >
-                            <X size={18} />
-                        </button>
-                    </div>
-                    <div className="my-4 space-y-2">
-                        <div className="flex gap-2">
-                            <div className="flex-1">
-                                <Input
-                                    value={emailInvite}
-                                    onChange={(e) => {
-                                        setEmailInvite(e.target.value);
-                                        setEmailError("");
-                                    }}
-                                    placeholder="Email your friend"
-                                    onClick={(e) => e.stopPropagation()}
-                                    className={emailError ? "border-red-500" : ""}
-                                />
-                                {emailError && (
-                                    <p className="text-red-500 text-xs mt-1">{emailError}</p>
-                                )}
-                            </div>
-                            <Button
-                                type="button"
-                                onClick={handleAddMember}
-                                disabled={isPending || !emailInvite.trim()}
-                            >
-                                {isPending ? "Inviting..." : "Invite"}
-                            </Button>
+            <DropdownMenuContent className="w-[600px] p-4">
+                {/* Content giống như trước */}
+                <div className="flex justify-between items-center mb-3">
+                    <p></p>
+                </div>
+
+                <div className="my-4 space-y-2">
+                    <div className="flex gap-2">
+                        <div className="flex-1">
+                            <Input
+                                value={emailInvite}
+                                onChange={(e) => {
+                                    setEmailInvite(e.target.value);
+                                    setEmailError("");
+                                }}
+                                placeholder="Email your friend"
+                                className={emailError ? "border-red-500" : ""}
+                            />
+                            {emailError && (
+                                <p className="text-red-500 text-xs mt-1">{emailError}</p>
+                            )}
                         </div>
+                        <Button
+                            type="button"
+                            onClick={handleAddMember}
+                            disabled={isPending || !emailInvite.trim()}
+                        >
+                            {isPending ? "Inviting..." : "Invite"}
+                        </Button>
                     </div>
+                </div>
 
-                    {/* hiển thị danh sách thành viên */}
-                    <div className="rounded-xl border border-gray-200 overflow-hidden">
-                        <table className="w-full text-sm">
-                            <thead className="bg-gray-50 border-b">
-                                <tr className="text-left text-gray-500">
-                                    <th className="py-3 px-4">User</th>
-                                    <th className="py-3 px-4">Joined</th>
-                                    <th className="py-3 px-4">Role</th>
-                                    {permission.role.trim().toLowerCase() === "admin" && <th className="py-3 px-4 text-right">Actions</th>}
-                                </tr>
-                            </thead>
+                {/* Table members */}
+                <div className="rounded-xl border border-gray-200 overflow-hidden">
+                    <table className="w-full text-sm">
+                        <thead className="bg-gray-50 border-b">
+                            <tr className="text-left text-gray-500">
+                                <th className="py-3 px-4">User</th>
+                                <th className="py-3 px-4">Joined</th>
+                                <th className="py-3 px-4">Role</th>
+                                {permission.role.trim().toLowerCase() === "admin" && <th className="py-3 px-4 text-right">Actions</th>}
+                            </tr>
+                        </thead>
 
-                            <tbody>
-                                {members && members.map((m) => (
-                                    <tr
-                                        key={m.userId}
-                                        className="border-b hover:bg-gray-50 transition"
-                                    >
-                                        {/* User */}
-                                        <td className="py-3 px-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="h-9 w-9 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold overflow-hidden">
-                                                    {m.avartarUrl ? (
-                                                        <img src={m.avartarUrl} className="h-full w-full object-cover" />
-                                                    ) : (
-                                                        m.displayName.charAt(0).toUpperCase()
+                        <tbody>
+                            {members && members.map((m) => (
+                                <tr
+                                    key={m.userId}
+                                    className="border-b hover:bg-gray-50 transition"
+                                >
+                                    {/* User */}
+                                    <td className="py-3 px-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="h-9 w-9 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold overflow-hidden">
+                                                {m.avartarUrl ? (
+                                                    <img src={m.avartarUrl} className="h-full w-full object-cover" />
+                                                ) : (
+                                                    m.displayName.charAt(0).toUpperCase()
+                                                )}
+                                            </div>
+
+                                            <div>
+                                                <div className="font-medium">{m.displayName}</div>
+                                                <div className="text-gray-500 text-xs">
+                                                    {m.email}
+
+                                                    {m.userId == currentUser?._id && (
+                                                        <span className="ml-2 text-[10px] px-2 py-[2px] bg-gray-200 rounded-full">
+                                                            You
+                                                        </span>
                                                     )}
                                                 </div>
-
-                                                <div>
-                                                    <div className="font-medium">{m.displayName}</div>
-                                                    <div className="text-gray-500 text-xs">
-                                                        {m.email}
-
-                                                        {m.userId == currentUser?._id && (
-                                                            <span className="ml-2 text-[10px] px-2 py-[2px] bg-gray-200 rounded-full">
-                                                                You
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                </div>
                                             </div>
+                                        </div>
+                                    </td>
+
+                                    {/* Joined */}
+                                    <td className="py-3 px-4 text-gray-600">
+                                        {formatDate(m.createAt)}
+                                    </td>
+
+                                    {/* Role */}
+                                    <td className="py-3 px-4">
+                                        <div className="text-gray-800 font-medium">
+                                            {m.permission}
+                                        </div>
+                                    </td>
+
+                                    {/* Actions */}
+                                    {(permission.role.trim().toLowerCase() === "admin" && m.permission.trim().toLowerCase() !== "admin") && (
+                                        <td className="py-3 px-4 text-right">
+                                            <DropMenuAction
+                                                role={m.permission}
+                                                userId={m.userId}
+                                                documentId={documentId}
+                                            />
                                         </td>
+                                    )}
 
-                                        {/* Joined */}
-                                        <td className="py-3 px-4 text-gray-600">
-                                            {formatDate(m.createAt)}
-                                        </td>
-
-                                        {/* Role */}
-                                        <td className="py-3 px-4">
-                                            <div className="text-gray-800 font-medium">
-                                                {m.permission}
-                                            </div>
-                                        </td>
-
-                                        {/* Actions */}
-                                        {(permission.role.trim().toLowerCase() === "admin" && m.permission.trim().toLowerCase() !== "admin") && (
-                                            <td className="py-3 px-4 text-right">
-                                                <DropMenuAction />
-                                            </td>
-                                        )}
-
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
-            )}
-        </div >
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
+
+    // return (
+    //     <div className="relative inline-block" ref={dropdownRef}>
+    //         <button
+    //             onClick={() => setOpen(!open)}
+    //             className="flex items-center gap-2 bg-blue-100 hover:bg-blue-200 text-slate-800 font-medium px-4 py-2 rounded-full transition-all duration-150 border border-transparent ">
+    //             <Lock size={16} className="text-slate-700" />
+    //             <span>Chia Sẻ</span>
+    //             <ChevronDown size={16} className="text-slate-700" />
+    //         </button>
+
+    //         {/*Popup chia sẻ */}
+    //         {open && (
+    //             <div className=" absolute right-0 mt-3 bg-white  shadow-xl rounded-xl border border-gray-200 p-4 z-50  "  >
+    //                 <div className="flex justify-between items-center mb-3">
+    //                     <p></p>
+    //                     <button
+    //                         onClick={() => setOpen(false)}
+    //                         className="text-gray-500 hover:text-gray-700"
+    //                     >
+    //                         <X size={18} />
+    //                     </button>
+    //                 </div>
+    //                 <div className="my-4 space-y-2">
+    //                     <div className="flex gap-2">
+    //                         <div className="flex-1">
+    //                             <Input
+    //                                 value={emailInvite}
+    //                                 onChange={(e) => {
+    //                                     setEmailInvite(e.target.value);
+    //                                     setEmailError("");
+    //                                 }}
+    //                                 placeholder="Email your friend"
+    //                                 onClick={(e) => e.stopPropagation()}
+    //                                 className={emailError ? "border-red-500" : ""}
+    //                             />
+    //                             {emailError && (
+    //                                 <p className="text-red-500 text-xs mt-1">{emailError}</p>
+    //                             )}
+    //                         </div>
+    //                         <Button
+    //                             type="button"
+    //                             onClick={handleAddMember}
+    //                             disabled={isPending || !emailInvite.trim()}
+    //                         >
+    //                             {isPending ? "Inviting..." : "Invite"}
+    //                         </Button>
+    //                     </div>
+    //                 </div>
+
+    //                 {/* hiển thị danh sách thành viên */}
+    //                 <div className="rounded-xl border border-gray-200 overflow-hidden">
+    //                     <table className="w-full text-sm">
+    //                         <thead className="bg-gray-50 border-b">
+    //                             <tr className="text-left text-gray-500">
+    //                                 <th className="py-3 px-4">User</th>
+    //                                 <th className="py-3 px-4">Joined</th>
+    //                                 <th className="py-3 px-4">Role</th>
+    //                                 {permission.role.trim().toLowerCase() === "admin" && <th className="py-3 px-4 text-right">Actions</th>}
+    //                             </tr>
+    //                         </thead>
+
+    //                         <tbody>
+    //                             {members && members.map((m) => (
+    //                                 <tr
+    //                                     key={m.userId}
+    //                                     className="border-b hover:bg-gray-50 transition"
+    //                                 >
+    //                                     {/* User */}
+    //                                     <td className="py-3 px-4">
+    //                                         <div className="flex items-center gap-3">
+    //                                             <div className="h-9 w-9 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold overflow-hidden">
+    //                                                 {m.avartarUrl ? (
+    //                                                     <img src={m.avartarUrl} className="h-full w-full object-cover" />
+    //                                                 ) : (
+    //                                                     m.displayName.charAt(0).toUpperCase()
+    //                                                 )}
+    //                                             </div>
+
+    //                                             <div>
+    //                                                 <div className="font-medium">{m.displayName}</div>
+    //                                                 <div className="text-gray-500 text-xs">
+    //                                                     {m.email}
+
+    //                                                     {m.userId == currentUser?._id && (
+    //                                                         <span className="ml-2 text-[10px] px-2 py-[2px] bg-gray-200 rounded-full">
+    //                                                             You
+    //                                                         </span>
+    //                                                     )}
+    //                                                 </div>
+    //                                             </div>
+    //                                         </div>
+    //                                     </td>
+
+    //                                     {/* Joined */}
+    //                                     <td className="py-3 px-4 text-gray-600">
+    //                                         {formatDate(m.createAt)}
+    //                                     </td>
+
+    //                                     {/* Role */}
+    //                                     <td className="py-3 px-4">
+    //                                         <div className="text-gray-800 font-medium">
+    //                                             {m.permission}
+    //                                         </div>
+    //                                     </td>
+
+    //                                     {/* Actions */}
+    //                                     {(permission.role.trim().toLowerCase() === "admin" && m.permission.trim().toLowerCase() !== "admin") && (
+    //                                         <td className="py-3 px-4 text-right">
+    //                                             <DropMenuAction
+    //                                                 role={m.permission}
+    //                                                 userId={m.userId}
+    //                                                 documentId={documentId}
+    //                                             />
+    //                                         </td>
+    //                                     )}
+
+    //                                 </tr>
+    //                             ))}
+    //                         </tbody>
+    //                     </table>
+    //                 </div>
+
+    //             </div>
+    //         )}
+    //     </div >
+    // );
 }

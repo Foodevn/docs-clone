@@ -35,3 +35,25 @@ export const useAddPermission = () => {
         }
     });
 };
+
+// =============================
+// Xóa tài liệu
+// =============================
+export const useDeletePermission = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ documentId, userId }: { documentId: string; userId: number }) => {
+            const res = await api.delete(`/documentpermissions/${documentId}`, {
+                data: { userId }   //Gửi qua config.data
+            });
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["documentPermissions"] });
+            toast.success("Đã xóa thành công");
+        },
+        onError: () => {
+            toast.error("Xóa thất bại");
+        }
+    });
+};

@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { User } from "@/types/user";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { LogOut, Settings } from "lucide-react";
 

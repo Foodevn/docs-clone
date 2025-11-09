@@ -1,7 +1,6 @@
 "use client";
 
 import Permission from "@/components/auth/permission";
-import { usePermission } from '@/components/auth/permission';
 import { Editor } from "./editor";
 import { Navbar } from "./navbar";
 import { Toolbar } from "./toolbar";

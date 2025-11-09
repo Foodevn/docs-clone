@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "../ui/label";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const signInSchema = z.object({
   username: z.string().min(3, "Tên đăng nhập phải có ít nhất 3 ký tự"),
@@ -47,7 +48,7 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
             <div className="flex flex-col gap-6">
               {/* header - logo */}
               <div className="flex flex-col items-center text-center gap-2">
-                <a
+                <Link
                   href="/"
                   className="mx-auto block w-fit text-center"
                 >
@@ -55,7 +56,7 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
                     src="/logo.svg"
                     alt="logo"
                   />
-                </a>
+                </Link>
 
                 <h1 className="text-2xl font-bold">Chào mừng quay lại</h1>
                 <p className="text-muted-foreground text-balance">

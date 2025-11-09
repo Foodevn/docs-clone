@@ -5,7 +5,6 @@ import Link from "next/link";
 import { BsFilePdf } from "react-icons/bs";
 import {
   BoldIcon,
-  ChevronDown,
   FileIcon,
   FileJsonIcon,
   FilePenIcon,
@@ -13,7 +12,6 @@ import {
   FileTextIcon,
   GlobeIcon,
   ItalicIcon,
-  Lock,
   PrinterIcon,
   Redo2Icon,
   RemoveFormattingIcon,

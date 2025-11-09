@@ -1,4 +1,3 @@
-import { usePermission } from "@/components/auth/permission";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -16,7 +15,7 @@ interface DropdownMenuPop {
 
 
 const DropMenuAction = ({ role, userId, documentId }: DropdownMenuPop) => {
-    const { mutate: deletePermission, isPending } = useDeletePermission();
+    const { mutate: deletePermission } = useDeletePermission();
 
     const handleDelete = (e: React.MouseEvent) => {
         e.stopPropagation();

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Eye, Lock, PencilLine, X } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, Eye, Lock, PencilLine } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { usePermission } from "@/components/auth/permission";

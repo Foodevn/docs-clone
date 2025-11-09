@@ -3,10 +3,9 @@
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { SiGoogledocs } from "react-icons/si";
-import { BookCheck, FileKey, MoreVertical, Shield, User, UserLock } from "lucide-react";
+import { User, UserLock } from "lucide-react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Document } from "@/types/document";
-import { Button } from "@/components/ui/button";
 import { DocumentMenu } from "./document-menu";
 
 interface DocumentRowProps {

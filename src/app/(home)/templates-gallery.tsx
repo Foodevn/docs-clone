@@ -11,10 +11,6 @@ import { templates } from "@/constants/templates";
 import { useCreateDocument } from "@/hooks/useDocuments";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-
-
-
 
 export const TemplatesGallery = () => {
 
@@ -23,7 +19,7 @@ export const TemplatesGallery = () => {
 
   const onTemplateClick = (title: string, initialContent: string) => {
     createDocument(
-      { title, content: "" },
+      { title, content: initialContent },
       {
         onSuccess: (data) => {
           router.push(`/documents/${data.documentId}`);
@@ -34,8 +30,6 @@ export const TemplatesGallery = () => {
       }
     );
   };
-
-
 
   return (
     <div className="bg-[#F1F3F4]">

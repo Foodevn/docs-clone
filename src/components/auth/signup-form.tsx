@@ -10,6 +10,7 @@ import { Label } from "../ui/label";
 import { useRouter } from "next/navigation";
 
 import { useAuthStore } from "@/stores/useAuthStore";
+import Link from "next/link";
 
 
 const signUpSchema = z.object({
@@ -56,16 +57,15 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
             <div className="flex flex-col gap-6">
               {/* header - logo */}
               <div className="flex flex-col items-center text-center gap-2">
-                <a
-                  href="/"
+                <Link
+                  href={"/"}
                   className="mx-auto block w-fit text-center"
                 >
                   <img
                     src="/logo.svg"
                     alt="logo"
                   />
-                </a>
-
+                </Link>
                 <h1 className="text-2xl font-bold">Tạo tài khoản Docs</h1>
                 <p className="text-muted-foreground text-balance">
                   Chào mừng bạn! Hãy đăng ký để bắt đầu!

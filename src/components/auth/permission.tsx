@@ -73,6 +73,7 @@ const Permission = ({ documentId, children }: PermissionPops) => {
                 setPermissionData(attachPermissions(res.data.permission))
                 setHasAccess(true);
             } catch (error) {
+                console.error(error);
                 return router.push("/");
             } finally {
                 setIsChecking(false);

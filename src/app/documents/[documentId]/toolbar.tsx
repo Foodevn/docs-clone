@@ -13,7 +13,6 @@ import {
   ImageIcon,
   ItalicIcon,
   Link2Icon,
-  ListCollapse,
   ListCollapseIcon,
   ListIcon,
   ListOrderedIcon,
@@ -50,9 +49,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { text } from "stream/consumers";
-import { se } from "date-fns/locale";
-import { set } from "date-fns";
+import { usePermission } from '@/components/auth/permission';
 
 const LineHeightButton = () => {
   const { editor } = useEditorStore();
@@ -63,6 +60,8 @@ const LineHeightButton = () => {
     { label: "1.5", value: "1.5" },
     { label: "Double", value: "2" },
   ];
+
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -89,6 +88,7 @@ const LineHeightButton = () => {
     </DropdownMenu>
   );
 }
+
 const FontSizeButton = () => {
   const { editor } = useEditorStore();
 
@@ -551,6 +551,7 @@ const ToolbarButton = ({
   isActive,
   icon: Icon,
 }: ToolbarButtonProps) => {
+
   return (
     <button
       onClick={onClick}
@@ -566,6 +567,8 @@ const ToolbarButton = ({
 
 export const Toolbar = () => {
   const { editor } = useEditorStore();
+  const permission = usePermission().permission;
+  const canEdit = permission.canEdit;
 
   const section: {
     label: string;
@@ -640,32 +643,35 @@ export const Toolbar = () => {
     ];
 
   return (
-    <div
-      className="bg-[#F1F4F9] px-2.5 py-0.5 rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto">
-      {section[0].map((item) => (
-        <ToolbarButton key={item.label} {...item} />
-      ))}
-      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-      <FontFamilyButton />
-      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-      <HeadingLevelButton />
-      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-      <FontSizeButton />
-      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-      {section[1].map((item) => (
-        <ToolbarButton key={item.label} {...item} />
-      ))}
-      <TextColorButton />
-      <HighlightColorButton />
-      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-      <LinkButton />
-      <ImageButton />
-      <AlignButton />
-      <LineHeightButton />
-      <ListButton />
-      {section[2].map((item) => (
-        <ToolbarButton key={item.label} {...item} />
-      ))}
-    </div>
+    <>{canEdit && (
+      <div
+        className="bg-[#F1F4F9] px-2.5 py-0.5 rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto">
+        {section[0].map((item) => (
+          <ToolbarButton key={item.label} {...item} />
+        ))}
+        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        <FontFamilyButton />
+        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        <HeadingLevelButton />
+        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        <FontSizeButton />
+        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        {section[1].map((item) => (
+          <ToolbarButton key={item.label} {...item} />
+        ))}
+        <TextColorButton />
+        <HighlightColorButton />
+        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        <LinkButton />
+        <ImageButton />
+        <AlignButton />
+        <LineHeightButton />
+        <ListButton />
+        {section[2].map((item) => (
+          <ToolbarButton key={item.label} {...item} />
+        ))}
+      </div>
+    )}
+    </>
   );
 };

@@ -1,4 +1,7 @@
+"use client";
+
 import Permission from "@/components/auth/permission";
+import { usePermission } from '@/components/auth/permission';
 import { Editor } from "./editor";
 import { Navbar } from "./navbar";
 import { Toolbar } from "./toolbar";
@@ -9,7 +12,6 @@ interface DocumentIdPageProps {
 
 const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
   const { documentId } = await params;
-
   return (
     <Permission documentId={documentId} >
       <div className="min-h-screen bg-[#FAFBFD]">
@@ -17,9 +19,9 @@ const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
           <Navbar />
           <Toolbar />
         </div>
-        <div className="pt-[114px] print:pt-0">
-          <Editor />
-        </div>
+        {/* <div className="pt-[114px] print:pt-0"> */}
+        <Editor />
+        {/* </div> */}
       </div>
     </Permission>
   );

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { usePermission } from "@/components/auth/permission";
 import DropMenuAction from "./drop-menu-user";
-import { useDocumentPermissions } from "@/hooks/useDocumentPermissions";
+import { useAddPermission, useDocumentPermissions } from "@/hooks/useDocumentPermissions";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 
@@ -19,6 +19,7 @@ export default function ShareButton() {
     const permission = usePermission().permission;
     const documentId = usePermission().documentId;
     const currentUser = useAuthStore((s) => s.user);
+    const { mutate: addPermission, isPending } = useAddPermission();
 
     const { data: members } = useDocumentPermissions(documentId);
     console.log(currentUser);
@@ -38,8 +39,12 @@ export default function ShareButton() {
             setEmailError("Email không hợp lệ");
             return;
         }
-        alert(`Đã gửi lời mời tới ${emailInvite}`);
-        setEmailInvite("");
+        addPermission({ email: emailInvite, documentId }, {
+            onSuccess: () => {
+                setEmailInvite("");
+            }
+        })
+
     };
 
     function formatDate(date: string) {
@@ -115,9 +120,9 @@ export default function ShareButton() {
                             <Button
                                 type="button"
                                 onClick={handleAddMember}
-                            // disabled={addMemberMutation.isPending || !emailInvite.trim()}
+                                disabled={isPending || !emailInvite.trim()}
                             >
-                                {/* {addMemberMutation.isPending ? "Inviting..." : "Invite"} */}
+                                {isPending ? "Inviting..." : "Invite"}
                             </Button>
                         </div>
                     </div>
@@ -156,7 +161,7 @@ export default function ShareButton() {
                                                     <div className="text-gray-500 text-xs">
                                                         {m.email}
 
-                                                        {m.userId == currentUser?.id && (
+                                                        {m.userId == currentUser?._id && (
                                                             <span className="ml-2 text-[10px] px-2 py-[2px] bg-gray-200 rounded-full">
                                                                 You
                                                             </span>

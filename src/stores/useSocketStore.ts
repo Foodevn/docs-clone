@@ -23,7 +23,8 @@ export const useSocketStore = create<SocketState>((set, get) => ({
     currentDocId: null,
 
     initSocket: () => {
-        const socket = io("http://127.0.0.1:5000");
+        const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || "http://127.0.0.1:5000";
+        const socket = io(socketUrl);
 
         socket.on("connect", () => {
             set({ isConnected: true });

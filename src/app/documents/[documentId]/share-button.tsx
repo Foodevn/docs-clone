@@ -35,7 +35,6 @@ export default function ShareButton() {
                 setEmailInvite("");
             }
         })
-
     };
 
     function formatDate(date: string) {

@@ -24,6 +24,9 @@ import { LineHeightExtension } from '@/extensions/line-height';
 import { Ruler } from './ruler';
 import { usePermission } from '@/components/auth/permission';
 
+import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
+import { Threads } from './threads';
+
 export const Editor = () => {
   const { setEditor } = useEditorStore();
   const permission = usePermission().permission;
@@ -31,7 +34,7 @@ export const Editor = () => {
   const canEdit = permission.canEdit;
   const topPadding = canEdit ? 'pt-[114px]' : 'pt-[64px]';
 
-  // Init socket 1 lần khi app start
+  const liveblocks = useLiveblocksExtension();
 
   const editor = useEditor({
     editable: permission.canEdit,//quyền trỉnh sửa trong editor
@@ -67,7 +70,10 @@ export const Editor = () => {
       },
     },
     extensions: [
-      StarterKit,
+      liveblocks,
+      StarterKit.configure({
+        history: false,
+      }),
       LineHeightExtension.configure({
         types: ["heading", "paragraph"],
         defaultLineHeight: "normal"
@@ -108,6 +114,7 @@ export const Editor = () => {
         {canEdit && (<Ruler />)}
         <div className='min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0'>
           <EditorContent editor={editor} />
+          <Threads editor={editor} />
         </div>
       </div>
     </div>

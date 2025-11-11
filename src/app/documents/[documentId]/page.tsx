@@ -4,6 +4,7 @@ import Permission from "@/components/auth/permission";
 import { Editor } from "./editor";
 import { Navbar } from "./navbar";
 import { Toolbar } from "./toolbar";
+import { Room } from "./room";
 
 interface DocumentIdPageProps {
   params: Promise<{ documentId: string }>
@@ -18,9 +19,9 @@ const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
           <Navbar />
           <Toolbar />
         </div>
-        {/* <div className="pt-[114px] print:pt-0"> */}
-        <Editor />
-        {/* </div> */}
+        <Room>
+          <Editor />
+        </Room>
       </div>
     </Permission>
   );

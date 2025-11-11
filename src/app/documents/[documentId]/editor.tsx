@@ -23,22 +23,15 @@ import { FontSizeExtension } from '@/extensions/font-size'
 import { LineHeightExtension } from '@/extensions/line-height';
 import { Ruler } from './ruler';
 import { usePermission } from '@/components/auth/permission';
-import { useEffect } from 'react';
-import { useSocketStore } from '@/stores/useSocketStore';
-
 
 export const Editor = () => {
   const { setEditor } = useEditorStore();
-  const { initSocket, joinDocument, leaveDocument, sendUpdate } = useSocketStore();
   const permission = usePermission().permission;
   const documentId = usePermission().documentId;
   const canEdit = permission.canEdit;
   const topPadding = canEdit ? 'pt-[114px]' : 'pt-[64px]';
 
   // Init socket 1 lần khi app start
-  useEffect(() => {
-    initSocket();
-  }, []);
 
   const editor = useEditor({
     editable: permission.canEdit,//quyền trỉnh sửa trong editor
@@ -51,9 +44,6 @@ export const Editor = () => {
     },
     onUpdate({ editor }) {
       setEditor(editor);
-
-      // Gửi update qua Zustand
-      sendUpdate(documentId, editor.getHTML());
     },
     onSelectionUpdate({ editor }) {
       setEditor(editor);
@@ -111,19 +101,6 @@ export const Editor = () => {
       TaskList,
     ],
   })
-
-  // Setup socket listeners cho document này
-  useEffect(() => {
-    if (!editor || !documentId) return;
-
-    // Gọi action từ Zustand
-    joinDocument(documentId, editor);
-
-    // Cleanup
-    return () => {
-      leaveDocument();
-    };
-  }, [editor, documentId]);
 
   return (
     <div className={`${topPadding} print:pt-0`}>

@@ -41,12 +41,10 @@ import { useEditorStore } from "@/stores/use-editor-store";
 import { UserButton } from "@/components/auth/user-component";
 import ShareButton from "./share-button";
 import { Avatars } from "./avatars";
+import { Inbox } from "./inbox";
 
 export const Navbar = () => {
   const { editor } = useEditorStore();
-
-  // const permission = usePermission();
-  // console.log("Permission data:", permission);
 
   const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
     editor
@@ -234,6 +232,7 @@ export const Navbar = () => {
       </div>
       <div className="flex gap-3 items-center pl-6">
         <Avatars />
+        <Inbox />
         <ShareButton />
         <UserButton />
       </div>

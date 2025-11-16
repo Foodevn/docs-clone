@@ -9,6 +9,8 @@ import {
 import { useParams } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useDocumentPermissions } from "@/hooks/useDocumentPermissions";
+import { getDocuments } from "./action";
+import { title } from "process";
 
 export function Room({ children }: { children: ReactNode }) {
     const params = useParams();
@@ -30,7 +32,7 @@ export function Room({ children }: { children: ReactNode }) {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        room,
+                        room: params.documentId,
                         accessToken
                     }),
                 });
@@ -69,7 +71,13 @@ export function Room({ children }: { children: ReactNode }) {
                 }
                 return filteredUsers.map((member) => String(member.userId));
             }}
-            resolveRoomsInfo={() => []}
+            resolveRoomsInfo={async ({ roomIds }) => {
+                const documents = await getDocuments(roomIds);
+                return documents.map((document) => ({
+                    id: document.id,
+                    name: document.title,
+                }));
+            }}
         >
             <RoomProvider id={params.documentId as string}>
                 <ClientSideSuspense fallback={<div>Loading room...</div>}>

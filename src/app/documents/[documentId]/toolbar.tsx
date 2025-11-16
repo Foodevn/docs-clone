@@ -625,8 +625,8 @@ export const Toolbar = () => {
         {
           label: "Comment",
           icon: MessageSquarePlusIcon,
-          onClick: () => console.log("Todo:Comment"),
-          isActive: false,
+          onClick: () => editor?.chain().focus().addPendingComment().run(),
+          isActive: editor?.isActive("liveblocksCommentMark"),
         },
         {
           label: "List Todo",

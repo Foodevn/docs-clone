@@ -10,7 +10,7 @@ import { Eye, MoreVertical, PencilLine, TrashIcon } from "lucide-react";
 interface DropdownMenuPop {
     role: string;
     userId: number;
-    documentId: string;
+    documentId: number;
 }
 
 

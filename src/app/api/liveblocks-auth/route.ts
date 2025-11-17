@@ -1,7 +1,6 @@
 import { Liveblocks } from "@liveblocks/node";
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import api from "@/lib/axios";
+
 
 const liveblocks = new Liveblocks({
     secret: process.env.LIVEBLOCKS_SECRET_KEY!,

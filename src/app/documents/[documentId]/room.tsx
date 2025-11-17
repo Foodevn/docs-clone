@@ -18,7 +18,7 @@ interface RoomProps {
 
 export function Room({ children, initialTitle = "Untitled Document" }: RoomProps) {
     const params = useParams();
-    const { data: members = [], isLoading } = useDocumentPermissions(params.documentId as string);
+    const { data: members = [], isLoading } = useDocumentPermissions(Number(params.documentId));
 
     if (isLoading) {
         return <div>Loading permissions...</div>;
@@ -27,7 +27,7 @@ export function Room({ children, initialTitle = "Untitled Document" }: RoomProps
     return (
         <LiveblocksProvider
             throttle={16}
-            authEndpoint={async (room) => {
+            authEndpoint={async () => {
                 const { accessToken } = useAuthStore.getState();
 
                 const response = await fetch("/api/liveblocks-auth", {
@@ -75,7 +75,7 @@ export function Room({ children, initialTitle = "Untitled Document" }: RoomProps
                 }
                 return filteredUsers.map((member) => String(member.userId));
             }}
-            resolveRoomsInfo={async ({ roomIds }) => {
+            resolveRoomsInfo={async ({ }) => {
                 const documents = await getDocuments();
                 return documents.map((document) => ({
                     id: document.id,

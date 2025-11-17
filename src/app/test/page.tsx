@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from 'react'
+import React from 'react'
 import api from "@/lib/axios";
 const pages = () => {
 

@@ -3,7 +3,7 @@ import api from "@/lib/axios";
 import { toast } from "sonner";
 import { DocumentPermissions } from "@/types/docuemntPermission";
 
-export const useDocumentPermissions = (documentId?: string) => {
+export const useDocumentPermissions = (documentId?: number) => {
     return useQuery({
         queryKey: ["documentPermissions", documentId],
         queryFn: async () => {
@@ -22,7 +22,7 @@ export const useAddPermission = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (data: { email: string; documentId: string }) => {
+        mutationFn: async (data: { email: string; documentId: number }) => {
             const res = await api.post("/documentpermissions/add", data);
             return res.data;
         },
@@ -42,7 +42,7 @@ export const useAddPermission = () => {
 export const useDeletePermission = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async ({ documentId, userId }: { documentId: string; userId: number }) => {
+        mutationFn: async ({ documentId, userId }: { documentId: number; userId: number }) => {
             const res = await api.delete(`/documentpermissions/${documentId}`, {
                 data: { userId }   //Gửi qua config.data
             });

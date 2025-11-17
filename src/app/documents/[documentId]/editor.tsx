@@ -34,7 +34,6 @@ export const Editor = () => {
 
   const { setEditor } = useEditorStore();
   const permission = usePermission().permission;
-  const documentId = usePermission().documentId;
   const canEdit = permission.canEdit;
   const topPadding = canEdit ? 'pt-[114px]' : 'pt-[64px]';
 

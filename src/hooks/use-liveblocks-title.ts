@@ -1,12 +1,7 @@
 import { useMutation, useStorage } from "@liveblocks/react/suspense";
 import { useUpdateDocument } from "./useDocuments";
-import { useEffect } from "react";
 
-/**
- * Hook để đồng bộ title giữa Liveblocks Storage và Database
- * - Đọc title từ Liveblocks Storage (real-time)
- * - Cập nhật title vào cả Liveblocks và Database
- */
+
 export const useLiveblocksTitle = (documentId: number) => {
     // Đọc title từ Liveblocks Storage (real-time)
     const title = useStorage((root) => root.title);

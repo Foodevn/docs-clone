@@ -15,7 +15,6 @@ interface DocumentInputProps {
 export const DocumentInput = ({ id }: DocumentInputProps) => {
   const status = useStatus();
 
-  // 👇 Sử dụng Liveblocks title thay vì prop title
   const { title, updateTitle } = useLiveblocksTitle(id);
 
   const [value, setValue] = useState(title || "Untitled");
@@ -25,7 +24,6 @@ export const DocumentInput = ({ id }: DocumentInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const permission = usePermission().permission;
 
-  // 👇 Sync local state với Liveblocks title khi thay đổi
   useEffect(() => {
     if (title) {
       setValue(title);

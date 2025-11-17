@@ -88,7 +88,7 @@ export function Room({ children, initialTitle = "Untitled Document" }: RoomProps
                 initialStorage={{
                     leftMargin: 56,
                     rightMargin: 56,
-                    title: initialTitle  // 👈 Khởi tạo title từ database
+                    title: initialTitle
                 }}
             >
                 <ClientSideSuspense fallback={<div>Loading room...</div>}>

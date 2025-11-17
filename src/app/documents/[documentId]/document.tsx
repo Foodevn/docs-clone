@@ -26,7 +26,7 @@ export const Document = ({ documentId }: DocumentProps) => {
                         <Navbar data={document} />
                         <Toolbar />
                     </div>
-                    <Editor />
+                    <Editor initialContent={document.content} />
                 </div>
             </Permission>
         </Room>

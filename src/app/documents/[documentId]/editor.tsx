@@ -24,20 +24,27 @@ import { FontSizeExtension } from '@/extensions/font-size'
 import { LineHeightExtension } from '@/extensions/line-height';
 import { Ruler } from './ruler';
 import { usePermission } from '@/components/auth/permission';
+import { LEFT_MARGIN_DEFAULT, RIGHT_MARGIN_DEFAULT } from '@/constants/margins';
 
 import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
 import { Threads } from './threads';
 
-export const Editor = () => {
-  const leftMargin = useStorage((root) => root.leftMargin);
-  const rightMargin = useStorage((root) => root.rightMargin);
+interface EditorProps {
+  initialContent?: string | undefined;
+};
+export const Editor = ({ initialContent }: EditorProps) => {
+  const leftMargin = useStorage((root) => root.leftMargin) ?? LEFT_MARGIN_DEFAULT;
+  const rightMargin = useStorage((root) => root.rightMargin) ?? RIGHT_MARGIN_DEFAULT;
 
   const { setEditor } = useEditorStore();
   const permission = usePermission().permission;
   const canEdit = permission.canEdit;
   const topPadding = canEdit ? 'pt-[114px]' : 'pt-[64px]';
 
-  const liveblocks = useLiveblocksExtension();
+  const liveblocks = useLiveblocksExtension({
+    initialContent,
+    offlineSupport_experimental: true,
+  });
 
   const editor = useEditor({
     editable: permission.canEdit,//quyền trỉnh sửa trong editor
@@ -68,7 +75,7 @@ export const Editor = () => {
     },
     editorProps: {
       attributes: {
-        style: `padding-left: ${leftMargin ?? 56}px; padding-right: ${rightMargin ?? 5}px;`,
+        style: `padding-left: ${leftMargin ?? LEFT_MARGIN_DEFAULT}px; padding-right: ${rightMargin ?? RIGHT_MARGIN_DEFAULT}px;`,
         class: "focus:outline-none print:border-0 bg-white border border-[#C7C7C7] flex flex-col min-h-[1054px] w-[816px] pt-10 pr-14 pb-10 cursor text",
       },
     },

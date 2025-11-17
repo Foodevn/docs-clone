@@ -10,6 +10,8 @@ import { useParams } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useDocumentPermissions } from "@/hooks/useDocumentPermissions";
 import { getDocuments } from "./action";
+import { LEFT_MARGIN_DEFAULT, RIGHT_MARGIN_DEFAULT } from '@/constants/margins';
+import { FullscreenLoader } from "@/components/fullscreen-loader";
 
 interface RoomProps {
     children: ReactNode;
@@ -86,12 +88,12 @@ export function Room({ children, initialTitle = "Untitled Document" }: RoomProps
             <RoomProvider
                 id={params.documentId as string}
                 initialStorage={{
-                    leftMargin: 56,
-                    rightMargin: 56,
+                    leftMargin: LEFT_MARGIN_DEFAULT,
+                    rightMargin: RIGHT_MARGIN_DEFAULT,
                     title: initialTitle
                 }}
             >
-                <ClientSideSuspense fallback={<div>Loading room...</div>}>
+                <ClientSideSuspense fallback={<FullscreenLoader label="Room loading..." />}>
                     {children}
                 </ClientSideSuspense>
             </RoomProvider>

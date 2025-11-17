@@ -8,7 +8,7 @@ interface DocumentIdPageProps {
 
 const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
   const { documentId } = await params;
-  return <Document documentId={documentId} />
+  return <Document documentId={Number(documentId)} />
 }
 
 export default DocumentIdPage;

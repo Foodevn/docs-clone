@@ -43,8 +43,18 @@ import ShareButton from "./share-button";
 import { Avatars } from "./avatars";
 import { Inbox } from "./inbox";
 
-export const Navbar = () => {
+import { RenameDialog } from "@/components/rename-dialog";
+import { RemoveDialog } from "@/components/remove-dialog";
+import { Document } from "@/types/document";
+import { usePermission } from "@/components/auth/permission";
+
+interface NavbarProps {
+  data: Document;
+};
+
+export const Navbar = ({ data }: NavbarProps) => {
   const { editor } = useEditorStore();
+  const permission = usePermission().permission;
 
   const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
     editor
@@ -69,7 +79,7 @@ export const Navbar = () => {
     const blob = new Blob([JSON.stringify(content)], {
       type: "application/json"
     });
-    onDownload(blob, `document.json`); //TODO: Use document name
+    onDownload(blob, `${data.title}.json`);
   };
 
   const onSaveHTML = () => {
@@ -79,7 +89,7 @@ export const Navbar = () => {
     const blob = new Blob([content], {
       type: "text/html"
     });
-    onDownload(blob, `document.html`); //TODO: Use document name
+    onDownload(blob, `${data.title}.json`);
   };
 
   const onSaveText = () => {
@@ -89,7 +99,7 @@ export const Navbar = () => {
     const blob = new Blob([content], {
       type: "text/plain"
     });
-    onDownload(blob, `document.txt`); //TODO: Use document name
+    onDownload(blob, `${data.title}.json`);
   };
 
   return (
@@ -99,7 +109,7 @@ export const Navbar = () => {
           <Image src="/logo.svg" alt="Logo" width={36} height={36} />
         </Link>
         <div className="flex flex-col">
-          <DocumentInput />
+          <DocumentInput id={data.id} />
           <div className="flex">
             <Menubar className="border-none bg-transparent shadow-none h-auto p-0">
               <MenubarMenu>
@@ -131,20 +141,36 @@ export const Navbar = () => {
                       </MenubarItem>
                     </MenubarSubContent>
                   </MenubarSub>
-                  <MenubarItem>
+                  {/* onClick={onNewDocument}*/}
+                  <MenubarItem >
                     <FilePlusIcon className="size-4 mr-2" />
                     New Document
                   </MenubarItem>
                   <MenubarSeparator />
-                  <MenubarItem>
-                    <FilePenIcon className="size-4 mr-2" />
-                    Rename
-                  </MenubarItem>
-                  <MenubarItem>
-                    <TrashIcon className="size-4 mr-2" />
-                    Remove
-                  </MenubarItem>
-                  <MenubarSeparator />
+                  {
+                    permission.role == "admin" && (<>
+                      <RenameDialog documentId={data.id} initialTitle={data.title}>
+                        <MenubarItem
+                          onClick={(e) => e.stopPropagation()}
+                          onSelect={(e) => e.preventDefault()}
+                        >
+                          <FilePenIcon className="size-4 mr-2" />
+                          Rename
+                        </MenubarItem>
+                      </RenameDialog>
+                      <RemoveDialog documentId={data.id} permission={permission.role}>
+                        <MenubarItem
+                          onClick={(e) => e.stopPropagation()}
+                          onSelect={(e) => e.preventDefault()}
+                        >
+                          <TrashIcon className="size-4 mr-2" />
+                          Remove
+                        </MenubarItem>
+                      </RemoveDialog>
+                      <MenubarSeparator />
+                    </>
+                    )
+                  }
                   <MenubarItem onClick={() => window.print()}>
                     <PrinterIcon className="size-4 mr-2" />
                     Print <MenubarShortcut>⌘P</MenubarShortcut>

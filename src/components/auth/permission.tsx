@@ -10,12 +10,12 @@ import React, {
 } from "react";
 
 interface PermissionPops {
-    documentId: string,
+    documentId: number,
     children: React.ReactNode;
 }
 
 interface PermissionData {
-    documentId: string;
+    documentId: number;
     permission: {
         role: string;
         canEdit: boolean;

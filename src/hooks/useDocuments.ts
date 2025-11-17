@@ -18,16 +18,18 @@ export const useDocuments = () => {
 // =============================
 // 2️⃣ Lấy 1 tài liệu cụ thể
 // =============================
-export const useDocument = (id?: string) => {
+export const useDocument = (id: number) => {
     return useQuery({
-        queryKey: ["document", id],
+        queryKey: ["document"],
         queryFn: async () => {
-            if (!id) return null;
+            if (!id) {
+                throw new Error("Document ID is required");  // ✅ Rõ ràng hơn
+            }
             const res = await api.get(`/documents/${id}`);
-            return res.data;
+            return res.data.document as Document;
         },
         enabled: !!id, // chỉ gọi khi có id
-
+        initialData: null,
     });
 };
 
@@ -53,7 +55,7 @@ export const useCreateDocument = () => {
 };
 
 // =============================
-// 4️⃣ Cập nhật tài liệu
+// Cập nhật tài liệu
 // =============================
 export const useUpdateDocument = () => {
     const queryClient = useQueryClient(
@@ -70,9 +72,9 @@ export const useUpdateDocument = () => {
             const res = await api.put(`/documents/${id}`, data);
             return res.data;
         },
-        onSuccess: (_, { id }) => {
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["document"] });
             queryClient.invalidateQueries({ queryKey: ["documents"] });
-            queryClient.invalidateQueries({ queryKey: ["document", id] });
             toast.success("tài liệu đã được cập nhật");
         },
         onError: () => {

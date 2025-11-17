@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         const user = data.user;
         const url = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user?.displayName ?? "A")}`;
 
-        if (user.id) {
+        if (user) {
             const userId = String(user.id);
             const session = liveblocks.prepareSession(userId, {
                 userInfo: {

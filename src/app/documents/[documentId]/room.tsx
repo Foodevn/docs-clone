@@ -10,9 +10,13 @@ import { useParams } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useDocumentPermissions } from "@/hooks/useDocumentPermissions";
 import { getDocuments } from "./action";
-import { title } from "process";
 
-export function Room({ children }: { children: ReactNode }) {
+interface RoomProps {
+    children: ReactNode;
+    initialTitle?: string;
+}
+
+export function Room({ children, initialTitle = "Untitled Document" }: RoomProps) {
     const params = useParams();
     const { data: members = [], isLoading } = useDocumentPermissions(params.documentId as string);
 
@@ -72,14 +76,21 @@ export function Room({ children }: { children: ReactNode }) {
                 return filteredUsers.map((member) => String(member.userId));
             }}
             resolveRoomsInfo={async ({ roomIds }) => {
-                const documents = await getDocuments(roomIds);
+                const documents = await getDocuments();
                 return documents.map((document) => ({
                     id: document.id,
                     name: document.title,
                 }));
             }}
         >
-            <RoomProvider id={params.documentId as string} initialStorage={{ leftMargin: 56, rightMargin: 56 }}>
+            <RoomProvider
+                id={params.documentId as string}
+                initialStorage={{
+                    leftMargin: 56,
+                    rightMargin: 56,
+                    title: initialTitle  // 👈 Khởi tạo title từ database
+                }}
+            >
                 <ClientSideSuspense fallback={<div>Loading room...</div>}>
                     {children}
                 </ClientSideSuspense>

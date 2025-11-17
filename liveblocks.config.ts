@@ -14,6 +14,7 @@ declare global {
             // animals: LiveList<string>;
             leftMargin: number;
             rightMargin: number;
+            title: string;  // 👈 Thêm title để đồng bộ real-time
         };
 
         // Custom user info set when authenticating with a secret key

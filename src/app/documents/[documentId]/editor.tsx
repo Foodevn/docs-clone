@@ -47,6 +47,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
   });
 
   const editor = useEditor({
+    immediatelyRender: false,
     editable: permission.canEdit,//quyền trỉnh sửa trong editor
 
     onCreate({ editor }) {

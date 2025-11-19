@@ -1,3 +1,4 @@
+import api from "@/lib/axios";
 import { Liveblocks } from "@liveblocks/node";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -16,15 +17,13 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const response = await fetch('http://localhost:5001/api/users/me', {
-            method: 'GET',
+        const response = await api.get('/users/me', {
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}` // Token đặt ở đây
             }
         });
 
-        const data = await response.json();
+        const data = response.data;
         const user = data.user;
         const url = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user?.displayName ?? "A")}`;
 

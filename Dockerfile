@@ -3,8 +3,8 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy package và cài dependencies
-# COPY package*.json ./
-# RUN npm ci --legacy-peer-deps
+COPY package*.json ./
+RUN npm ci --legacy-peer-deps
 
 # Copy toàn bộ source code
 COPY . .

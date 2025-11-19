@@ -5,7 +5,7 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDeletePermission } from "@/hooks/useDocumentPermissions";
+import { useChangePermission, useDeletePermission } from "@/hooks/useDocumentPermissions";
 import { Eye, MoreVertical, PencilLine, TrashIcon } from "lucide-react";
 interface DropdownMenuPop {
     role: string;
@@ -16,20 +16,37 @@ interface DropdownMenuPop {
 
 const DropMenuAction = ({ role, userId, documentId }: DropdownMenuPop) => {
     const { mutate: deletePermission } = useDeletePermission();
+    const { mutate: changePermission } = useChangePermission();
 
     const handleDelete = (e: React.MouseEvent) => {
         e.stopPropagation();
-        console.log(" xóa quyền")
         deletePermission({
             documentId,
             userId,
-
         });
     }
-    const handleChangeRole = (e: React.MouseEvent) => {
+
+    const handleChangeViewerToMember = (e: React.MouseEvent) => {
         e.stopPropagation();
-        //todo: đổi role cho người dùng
-        console.log(" đổi  quyền")
+        changePermission({
+            documentId,
+            data: {
+                userId,
+                role: "member",
+            },
+        });
+        console.log("doi sang member")
+    }
+    const handleChangeMemberToViewer = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        changePermission({
+            documentId,
+            data: {
+                userId,
+                role: "viewer",
+            },
+        });
+        console.log("doi sang viewer");
     }
 
     return (
@@ -44,7 +61,7 @@ const DropMenuAction = ({ role, userId, documentId }: DropdownMenuPop) => {
                 {role == "viewer" ? (
                     <DropdownMenuItem
                         onSelect={(e) => e.preventDefault()}
-                        onClick={(e) => handleChangeRole(e)}
+                        onClick={(e) => handleChangeViewerToMember(e)}
                     >
                         <PencilLine className="size-4 mr-2" />
                         member
@@ -52,7 +69,7 @@ const DropMenuAction = ({ role, userId, documentId }: DropdownMenuPop) => {
                 ) : (
                     <DropdownMenuItem
                         onSelect={(e) => e.preventDefault()}
-                        onClick={(e) => handleChangeRole(e)}
+                        onClick={(e) => handleChangeMemberToViewer(e)}
                     >
                         <Eye className="size-4 mr-2" />
                         viewer

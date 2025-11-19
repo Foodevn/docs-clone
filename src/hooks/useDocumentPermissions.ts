@@ -57,3 +57,38 @@ export const useDeletePermission = () => {
         }
     });
 };
+
+// =============================
+// Đổi quyền 
+// =============================
+export const useChangePermission = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({
+            documentId,
+            data,
+        }: {
+            documentId: number;
+            data: {
+                userId: number,
+                role: string,
+            }
+
+        }) => {
+            const res = await api.put(`/documentpermissions/${documentId}`,
+                data
+            );
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["documentPermissions"] });
+            toast.success("Đổi quyền thành công");
+        },
+        onError: () => {
+            toast.error("Đổi quyền thất bại");
+        }
+    });
+};
+
+
+

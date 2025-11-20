@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import { Document } from "@/types/document";
 import { toast } from "sonner";
+
 // =============================
 // 1️⃣ Lấy tất cả tài liệu
 // =============================
@@ -23,12 +24,12 @@ export const useDocument = (id: number) => {
         queryKey: ["document"],
         queryFn: async () => {
             if (!id) {
-                throw new Error("Document ID is required");  // ✅ Rõ ràng hơn
+                throw new Error("Document ID is required");
             }
             const res = await api.get(`/documents/${id}`);
             return res.data.document as Document;
         },
-        enabled: !!id, // chỉ gọi khi có id
+        enabled: !!id,
         initialData: null,
     });
 };
@@ -46,10 +47,10 @@ export const useCreateDocument = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["documents"] });
-            toast.success("đã tạo tài liệu mới");
+            toast.success("Document created successfully");
         },
         onError: () => {
-            toast.error("lỗi khi tạo tài liệu");
+            toast.error("Failed to create document");
         }
     });
 };
@@ -58,8 +59,7 @@ export const useCreateDocument = () => {
 // Cập nhật tài liệu
 // =============================
 export const useUpdateDocument = () => {
-    const queryClient = useQueryClient(
-    );
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: async ({
@@ -75,12 +75,11 @@ export const useUpdateDocument = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["document"] });
             queryClient.invalidateQueries({ queryKey: ["documents"] });
-            toast.success("tài liệu đã được cập nhật");
+            toast.success("Document updated successfully");
         },
         onError: () => {
-            toast.error("cập nhật tài liệu thất bại");
+            toast.error("Failed to update document");
         }
-
     });
 };
 
@@ -92,16 +91,16 @@ export const useDeleteDocument = () => {
     return useMutation({
         mutationFn: async ({ id, permission }: { id: number; permission: string }) => {
             const res = await api.delete(`/documents/${id}`, {
-                data: { permission }   // ⭐ Gửi qua config.data
+                data: { permission }
             });
             return res.data;
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["documents"] });
-            toast.success("tài liệu đã được xóa");
+            toast.success("Document deleted successfully");
         },
         onError: () => {
-            toast.error("xóa tài liệu thất bại");
+            toast.error("Failed to delete document");
         }
     });
 };

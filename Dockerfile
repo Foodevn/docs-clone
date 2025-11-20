@@ -26,7 +26,7 @@ COPY --from=builder /app/node_modules ./node_modules
 
 # Thiết lập biến môi trường (nếu có)
 # ENV NODE_ENV=production
-# ENV LIVEBLOCKS_SECRET_KEY=sk_dev_kJrjWGDvpd5y2kMICG6ER9Ly703lOwxPummaGeG3nvaaOBqIR0s2C99XIMigvP_J
+# ENV LIVEBLOCKS_SECRET_KEY=sk_dev_kJrjWGDvpd5yR9Ly703lOwxPummaGeG3nvaaOBqIR0s2C99XIMigvP_J
 
 EXPOSE 3000
 

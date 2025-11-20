@@ -11,8 +11,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const signInSchema = z.object({
-  username: z.string().min(3, "Tên đăng nhập phải có ít nhất 3 ký tự"),
-  password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
+  username: z.string().min(3, "Username must have at least 3 characters"),
+  password: z.string().min(6, "Password must have at least 6 characters"),
 });
 
 type SignInFormValues = z.infer<typeof signInSchema>;
@@ -58,9 +58,9 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
                   />
                 </Link>
 
-                <h1 className="text-2xl font-bold">Chào mừng quay lại</h1>
+                <h1 className="text-2xl font-bold">Welcome Back</h1>
                 <p className="text-muted-foreground text-balance">
-                  Đăng nhập vào tài khoản Docs của bạn
+                  Sign in to your Docs account
                 </p>
               </div>
 
@@ -70,12 +70,12 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
                   htmlFor="username"
                   className="block text-sm"
                 >
-                  Tên đăng nhập
+                  Username
                 </Label>
                 <Input
                   type="text"
                   id="username"
-                  placeholder="moji"
+                  placeholder="Tèo "
                   {...register("username")}
                 />
                 {errors.username && (
@@ -91,7 +91,7 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
                   htmlFor="password"
                   className="block text-sm"
                 >
-                  Mật khẩu
+                  Password
                 </Label>
                 <Input
                   type="password"
@@ -105,22 +105,22 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
                 )}
               </div>
 
-              {/* nút đăng nhập */}
+              {/* sign in button */}
               <Button
                 type="submit"
                 className="w-full"
                 disabled={isSubmitting}
               >
-                Đăng nhập
+                Sign In
               </Button>
 
               <div className="text-center text-sm">
-                Chưa có tài khoản?{" "}
+                Don’t have an account?{" "}
                 <a
                   href="/signup"
                   className="underline underline-offset-4"
                 >
-                  Đăng ký
+                  Sign Up
                 </a>
               </div>
             </div>
@@ -134,9 +134,10 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
           </div>
         </CardContent>
       </Card>
-      <div className=" text-xs text-balance px-6 text-center *:[a]:hover:text-primary text-muted-foreground *:[a]:underline *:[a]:underline-offetset-4">
-        Bằng cách tiếp tục, bạn đồng ý với <a href="#">Điều khoản dịch vụ</a> và{" "}
-        <a href="#">Chính sách bảo mật</a> của chúng tôi.
+
+      <div className="text-xs text-balance px-6 text-center *:[a]:hover:text-primary text-muted-foreground *:[a]:underline *:[a]:underline-offetset-4">
+        By continuing, you agree to our <a href="#">Terms of Service</a> and{" "}
+        <a href="#">Privacy Policy</a>.
       </div>
     </div>
   );

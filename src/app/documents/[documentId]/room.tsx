@@ -23,7 +23,7 @@ export function Room({ children, initialTitle = "Untitled Document" }: RoomProps
     const { data: members = [], isLoading } = useDocumentPermissions(Number(params.documentId));
 
     if (isLoading) {
-        return <div>Loading permissions...</div>;
+        return <FullscreenLoader label="Loading..." />;
     }
 
     return (
@@ -93,7 +93,7 @@ export function Room({ children, initialTitle = "Untitled Document" }: RoomProps
                     title: initialTitle
                 }}
             >
-                <ClientSideSuspense fallback={<FullscreenLoader label="Room loading..." />}>
+                <ClientSideSuspense fallback={<FullscreenLoader label="Loading..." />}>
                     {children}
                 </ClientSideSuspense>
             </RoomProvider>

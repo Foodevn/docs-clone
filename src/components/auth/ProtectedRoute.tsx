@@ -2,6 +2,7 @@
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { FullscreenLoader } from "../fullscreen-loader";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -34,9 +35,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   if (starting || loading) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        Đang tải trang...
-      </div>
+      <FullscreenLoader label="Loading..." />
     );
   }
 

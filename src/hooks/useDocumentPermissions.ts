@@ -13,10 +13,10 @@ export const useDocumentPermissions = (documentId?: number) => {
         },
         enabled: !!documentId,
     });
-}
+};
 
 // =============================
-// Tạo permission mới
+// Create new permission
 // =============================
 export const useAddPermission = () => {
     const queryClient = useQueryClient();
@@ -28,38 +28,38 @@ export const useAddPermission = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["documentPermissions"] });
-            toast.success("Đã thêm thành viên");
+            toast.success("Member added successfully");
         },
         onError: () => {
-            toast.error("thêm thành viên thất bại");
+            toast.error("Failed to add member");
         }
     });
 };
 
 // =============================
-// Xóa tài liệu
+// Delete permission
 // =============================
 export const useDeletePermission = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async ({ documentId, userId }: { documentId: number; userId: number }) => {
             const res = await api.delete(`/documentpermissions/${documentId}`, {
-                data: { userId }   //Gửi qua config.data
+                data: { userId } // Send via config.data
             });
             return res.data;
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["documentPermissions"] });
-            toast.success("Đã xóa thành công");
+            toast.success("Removed successfully");
         },
         onError: () => {
-            toast.error("Xóa thất bại");
+            toast.error("Failed to remove");
         }
     });
 };
 
 // =============================
-// Đổi quyền 
+// Update permission (change role)
 // =============================
 export const useChangePermission = () => {
     const queryClient = useQueryClient();
@@ -70,25 +70,19 @@ export const useChangePermission = () => {
         }: {
             documentId: number;
             data: {
-                userId: number,
-                role: string,
-            }
-
+                userId: number;
+                role: string;
+            };
         }) => {
-            const res = await api.put(`/documentpermissions/${documentId}`,
-                data
-            );
+            const res = await api.put(`/documentpermissions/${documentId}`, data);
             return res.data;
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["documentPermissions"] });
-            toast.success("Đổi quyền thành công");
+            toast.success("Role updated successfully");
         },
         onError: () => {
-            toast.error("Đổi quyền thất bại");
+            toast.error("Failed to update role");
         }
     });
 };
-
-
-

@@ -35,7 +35,6 @@ const DropMenuAction = ({ role, userId, documentId }: DropdownMenuPop) => {
                 role: "member",
             },
         });
-        console.log("doi sang member")
     }
     const handleChangeMemberToViewer = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -46,7 +45,6 @@ const DropMenuAction = ({ role, userId, documentId }: DropdownMenuPop) => {
                 role: "viewer",
             },
         });
-        console.log("doi sang viewer");
     }
 
     return (

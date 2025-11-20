@@ -8,6 +8,7 @@ import React, {
     createContext,
     useContext
 } from "react";
+import { FullscreenLoader } from "../fullscreen-loader";
 
 interface PermissionPops {
     documentId: number,
@@ -34,7 +35,7 @@ export const usePermission = () => {
 };
 
 const Permission = ({ documentId, children }: PermissionPops) => {
-    const router = useRouter(); // ⭐ useRouter thay vì redirect
+    const router = useRouter();
     const [isChecking, setIsChecking] = useState(true);
     const [hasAccess, setHasAccess] = useState(false);
     const [permissionData, setPermissionData] = useState<PermissionData["permission"]>({ role: '', canEdit: false });
@@ -83,23 +84,19 @@ const Permission = ({ documentId, children }: PermissionPops) => {
     }, [documentId]);
 
     if (isChecking) {
-        return <div className="flex items-center justify-center h-screen">
-            Đang kiểm tra quyền...
-        </div>;
+        return <FullscreenLoader label="Loading..." />;
     }
 
     if (!hasAccess) {
         router.push("/");
         return <div className="flex items-center justify-center h-screen">
-            Bạn không có quyền truy cập
+            You do not have access
         </div>;
     }
-    // ⭐ Truyền cả documentId vào Context
     const contextValue = {
-        documentId,  // ⭐ Thêm vào đây
+        documentId,
         permission: permissionData,
     };
-
     return (
         <PermissionContext.Provider value={contextValue}>
             {children}

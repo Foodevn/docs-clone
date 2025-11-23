@@ -74,9 +74,8 @@ export const UserButton = () => {
                             <p className="text-xs text-gray-500">{user.email}</p>
                         </div>
                     </div>
-                    <div className="border-t border-gray-200 my-1"></div>
-
-                    {/* <button
+                    {/* <div className="border-t border-gray-200 my-1"></div>
+                    <button
                         onClick={() => router.push("/profile")}
                         className="flex w-full text-left px-8 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >

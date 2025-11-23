@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { LogOut, Settings } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 export const UserButton = () => {
     const [isOpen, setIsOpen] = useState(false);
